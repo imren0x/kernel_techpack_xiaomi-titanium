@@ -4,7 +4,7 @@ config SPI_PEELIR
 	---help---
 	   Enable this option if you use peelir.
 
-config IR_PWM
+config IR_PWM_MI8953
 	tristate "PWM IR remote control"
 	depends on RC_CORE
 	---help---
