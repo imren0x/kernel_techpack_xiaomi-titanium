@@ -4,6 +4,7 @@
 #include "camera.dtsi"
 #include "audio.dtsi"
 #include "misc.dtsi"
+#include "memory.dtsi"
 #include "pinctrl.dtsi"
 #include "fingerprint.dtsi"
 #include "pmic.dtsi"
