@@ -160,6 +160,8 @@
 #define _FT5D46             0x5D460487
 
 #define _FT3658U            0x3658D488
+#define _FT8606     0x86060808
+#define _FTE716     0xE716080a
 
 /******************* Enables *********************/
 /*********** 1 to enable, 0 to disable ***********/
