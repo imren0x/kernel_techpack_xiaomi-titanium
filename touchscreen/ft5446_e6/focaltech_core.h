@@ -67,9 +67,6 @@
 #include <linux/ioctl.h>
 #include "focaltech_common.h"
 #include "focaltech_flash.h"
-#if FTS_PSENSOR_EN
-#include <linux/sensors.h>
-#endif
 /*****************************************************************************
 * Private constant and macro definitions using #define
 *****************************************************************************/
@@ -156,9 +153,6 @@ struct fts_ts_data
     struct input_dev *input_dev;
     struct ts_event event;
     const struct fts_ts_platform_data *pdata;
-    #if FTS_PSENSOR_EN
-    struct fts_psensor_platform_data *psensor_pdata;
-    #endif
     struct work_struct  touch_event_work;
     struct workqueue_struct *ts_workqueue;
     struct regulator *vdd;
@@ -187,22 +181,6 @@ struct fts_ts_data
 };
 
 
-#if FTS_PSENSOR_EN
-struct fts_psensor_platform_data
-{
-    struct input_dev *input_psensor_dev;
-    struct sensors_classdev ps_cdev;
-    int tp_psensor_opened;
-    char tp_psensor_data; /* 0 near, 1 far */
-    struct fts_ts_data *data;
-};
-
-int fts_sensor_init(struct fts_ts_data *data);
-int fts_sensor_read_data(struct fts_ts_data *data);
-int fts_sensor_suspend(struct fts_ts_data *data);
-int fts_sensor_resume(struct fts_ts_data *data);
-int fts_sensor_remove(struct fts_ts_data *data);
-#endif
 extern bool gesture_incall;
 
 /*****************************************************************************

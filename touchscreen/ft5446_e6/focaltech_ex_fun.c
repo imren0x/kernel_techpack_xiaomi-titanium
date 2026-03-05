@@ -1106,9 +1106,6 @@ static ssize_t fts_module_config_show(struct device *dev, struct device_attribut
 	#endif
 	count += sprintf(buf+count, "FTS_GESTURE_EN: \t\t%s\n", FTS_GESTURE_EN ? "ON" : "OFF");
 	count += sprintf(buf+count, "FTS_ESDCHECK_EN: \t\t%s\n", FTS_ESDCHECK_EN ? "ON" : "OFF");
-	#if defined(FTS_PSENSOR_EN)
-	count += sprintf(buf+count, "FTS_PSENSOR_EN: \t\t%s\n", FTS_PSENSOR_EN ? "ON" : "OFF");
-	#endif
 	count += sprintf(buf+count, "FTS_GLOVE_EN: \t\t\t%s\n", FTS_GLOVE_EN ? "ON" : "OFF");
 	count += sprintf(buf+count, "FTS_COVER_EN: \t\t%s\n", FTS_COVER_EN ? "ON" : "OFF");
 	count += sprintf(buf+count, "FTS_CHARGER_EN: \t\t\t%s\n", FTS_CHARGER_EN ? "ON" : "OFF");

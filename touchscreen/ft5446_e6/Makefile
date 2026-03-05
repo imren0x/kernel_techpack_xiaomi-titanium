@@ -11,6 +11,5 @@ obj-y   +=  focaltech_flash.o
 obj-y   +=  focaltech_gesture.o
 obj-y   +=  focaltech_esdcheck.o
 obj-y   +=  focaltech_i2c.o
-obj-y   +=  focaltech_sensor.o
 obj-y   +=  focaltech_point_report_check.o
 obj-y   +=  focaltech_flash/

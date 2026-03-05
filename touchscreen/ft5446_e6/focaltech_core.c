@@ -737,14 +737,6 @@ static int fts_read_touchdata(struct fts_ts_data *data)
 	}
 	#endif
 
-	#if FTS_PSENSOR_EN
-	if ( (fts_sensor_read_data(data) != 0) && (data->suspended == 1) )
-	{
-		return 1;
-	}
-	#endif
-
-
 	#if FTS_READ_TOUCH_BUFFER_DIVIDED
 	memset(buf, 0xFF, POINT_READ_BUF);
 	memset(event, 0, sizeof(struct ts_event));
@@ -1400,15 +1392,6 @@ static int fts_ts_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	fts_irq_disable();
 
-	#if FTS_PSENSOR_EN
-	if ( fts_sensor_init(data) != 0)
-	{
-		FTS_ERROR("fts_sensor_init failed!");
-		FTS_FUNC_EXIT();
-		return 0;
-	}
-	#endif
-
 	#if FTS_APK_NODE_EN
 	fts_create_apk_debug_channel(client);
 	#endif
@@ -1509,10 +1492,6 @@ static int fts_ts_remove(struct i2c_client *client)
 
 	FTS_FUNC_ENTER();
 	cancel_work_sync(&data->touch_event_work);
-
-	#if FTS_PSENSOR_EN
-	fts_sensor_remove(data);
-	#endif
 
 	#if FTS_POINT_REPORT_CHECK_EN
 	fts_point_report_check_exit();
@@ -1652,15 +1631,6 @@ static int fts_ts_suspend(struct device *dev)
 	}
 	#endif
 
-	#if FTS_PSENSOR_EN
-	if ( fts_sensor_suspend(data) != 0 )
-	{
-		enable_irq_wake(data->client->irq);
-		data->suspended = true;
-		return 0;
-	}
-	#endif
-
 	fts_irq_disable();
 
 	/* TP enter sleep mode */
@@ -1768,16 +1738,6 @@ static int fts_ts_resume(struct device *dev)
 		err = disable_irq_wake(data->client->irq);
 		if (err)
 			FTS_ERROR("%s: disable_irq_wake failed", __func__);
-		data->suspended = false;
-		FTS_FUNC_EXIT();
-		return 0;
-	}
-	#endif
-
-	#if FTS_PSENSOR_EN
-	if ( fts_sensor_resume(data) != 0 )
-	{
-		disable_irq_wake(data->client->irq);
 		data->suspended = false;
 		FTS_FUNC_EXIT();
 		return 0;
