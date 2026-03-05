@@ -1441,11 +1441,6 @@ static int fts_ts_probe(struct i2c_client *client, const struct i2c_device_id *i
 	fts_ctpm_upgrade_init();
 	#endif
 
-	#if FTS_TEST_EN
-	fts_test_init(client);
-	init_tp_selftest(client);
-	#endif
-
 	#if defined(CONFIG_FB)
 	data->fb_notif.notifier_call = fb_notifier_callback;
 	err = fb_register_client(&data->fb_notif);
@@ -1567,10 +1562,6 @@ static int fts_ts_remove(struct i2c_client *client)
 	}
 
 	input_unregister_device(data->input_dev);
-
-	#if FTS_TEST_EN
-	fts_test_exit(client);
-	#endif
 
 	#if FTS_ESDCHECK_EN
 	fts_esdcheck_exit();

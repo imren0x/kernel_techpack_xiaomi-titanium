@@ -1113,7 +1113,6 @@ static ssize_t fts_module_config_show(struct device *dev, struct device_attribut
 	count += sprintf(buf+count, "FTS_COVER_EN: \t\t%s\n", FTS_COVER_EN ? "ON" : "OFF");
 	count += sprintf(buf+count, "FTS_CHARGER_EN: \t\t\t%s\n", FTS_CHARGER_EN ? "ON" : "OFF");
 	count += sprintf(buf+count, "FTS_REPORT_PRESSURE_EN: \t\t%s\n", FTS_REPORT_PRESSURE_EN ? "ON" : "OFF");
-	count += sprintf(buf+count, "FTS_TEST_EN: \t\t\t%s\n", FTS_TEST_EN ? "ON" : "OFF");
 	count += sprintf(buf+count, "FTS_APK_NODE_EN: \t\t%s\n", FTS_APK_NODE_EN ? "ON" : "OFF");
 	count += sprintf(buf+count, "FTS_POWER_SOURCE_CUST_EN: \t%s\n", FTS_POWER_SOURCE_CUST_EN ? "ON" : "OFF");
 	count += sprintf(buf+count, "FTS_AUTO_UPGRADE_EN: \t\t%s\n", FTS_AUTO_UPGRADE_EN ? "ON" : "OFF");

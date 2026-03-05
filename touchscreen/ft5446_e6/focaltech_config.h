@@ -122,12 +122,6 @@
 #define FTS_ESDCHECK_EN                         1
 
 /*
- * Production test enable
- * 1: enable, 0:disable(default)
- */
-#define FTS_TEST_EN                             0
-
-/*
  * Glove mode enable
  * 1: enable, 0:disable(default)
  */

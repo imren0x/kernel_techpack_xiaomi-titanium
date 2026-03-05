@@ -150,13 +150,6 @@ int fts_esdcheck_resume(void);
 int fts_esdcheck_get_status(void);
 #endif
 
-/* Production test */
-#if FTS_TEST_EN
-int fts_test_init(struct i2c_client *client);
-int fts_test_exit(struct i2c_client *client);
-int init_tp_selftest(struct i2c_client * client);
-#endif
-
 /* Point Report Check*/
 #if FTS_POINT_REPORT_CHECK_EN
 int fts_point_report_check_init(void);
