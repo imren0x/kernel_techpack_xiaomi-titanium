@@ -1,7 +1,6 @@
 &i2c_3 {
 	status = "ok";
 	clock-frequency = <400000>;
-	qcom,disable-dma;
 
 	goodix@5d{
 		compatible = "goodix,gt9xx";
