@@ -67,7 +67,7 @@ struct upgrade_func upgrade_func_ft8720 = {
 };
 
 struct upgrade_func *upgrade_func_list[] = {
-	&upgrade_func_ft5452,
+	&upgrade_func_ft5x46,
 	&upgrade_func_ft5652,
 	&upgrade_func_ft8720,
 };

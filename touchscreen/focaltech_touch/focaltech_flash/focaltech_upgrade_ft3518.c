@@ -34,23 +34,19 @@
 #include "../focaltech_flash.h"
 
 /************************************************************************
-* Name: fts_ft5452_upgrade
+* Name: fts_ft5x46_upgrade
 * Brief:
 * Input:
 * Output:
 * Return: return 0 if success, otherwise return error code
 ***********************************************************************/
-static int fts_ft5452_upgrade(u8 *buf, u32 len)
+static int fts_ft5x46_upgrade(u8 *buf, u32 len)
 {
 	int ret = 0;
 	u32 start_addr = 0;
 	u8 cmd[4] = { 0 };
 	int ecc_in_host = 0;
 	int ecc_in_tp = 0;
-
-	int i = 0;
-	u8 wbuf[7] = { 0 };
-	u8 reg_val[4] = {0};
 
 	if (NULL == buf) {
 		FTS_ERROR("fw buf is null");
@@ -94,62 +90,19 @@ static int fts_ft5452_upgrade(u8 *buf, u32 len)
 	}
 
 	/* write app */
-	start_addr = upgrade_func_ft5452.appoff;
+	start_addr = upgrade_func_ft5x46.appoff;
 	ecc_in_host = fts_flash_write_buf(start_addr, buf, len, 1);
-	if (ecc_in_host < 0 ) {
+	if (ecc_in_host < 0) {
 		FTS_ERROR("lcd initial code write fail");
 		goto fw_reset;
 	}
 
-	FTS_INFO( "**********read out checksum**********");
-
-	/* check sum init */
-	wbuf[0] = FTS_CMD_ECC_INIT;
-	ret = fts_write(wbuf, 1);
-	if (ret < 0) {
-		FTS_ERROR("ecc init cmd write fail");
-		return ret;
+	/* ecc */
+	ecc_in_tp = fts_fwupg_ecc_cal(start_addr, len);
+	if (ecc_in_tp < 0) {
+		FTS_ERROR("ecc read fail");
+		goto fw_reset;
 	}
-
-	/* send commond to start checksum */
-	wbuf[0] = FTS_CMD_ECC_CAL;
-	wbuf[1] = BYTE_OFF_16(start_addr);
-	wbuf[2] = BYTE_OFF_8(start_addr);
-	wbuf[3] = BYTE_OFF_0(start_addr);
-
-	wbuf[4] = BYTE_OFF_16(len);
-	wbuf[5] = BYTE_OFF_8(len);
-	wbuf[6] = BYTE_OFF_0(len);
-
-	FTS_DEBUG("ecc calc startaddr:0x%04x, len:%d", start_addr, len);
-	ret = fts_write(wbuf, 7);
-	if (ret < 0) {
-		FTS_ERROR("ecc calc cmd write fail");
-		return ret;
-	}
-
-	msleep(len / 256);
-
-	/* read status if check sum is finished */
-	for (i = 0; i < FTS_RETRIES_ECC_CAL; i++) {
-		wbuf[0] = FTS_CMD_FLASH_STATUS;
-		reg_val[0] = reg_val[1] = 0x00;
-		fts_read(wbuf, 1, reg_val, 2);
-		FTS_DEBUG("[UPGRADE]: reg_val[0]=%02x reg_val[0]=%02x!!", reg_val[0], reg_val[1]);
-		if ((0xF0 == reg_val[0]) && (0x55 == reg_val[1])) {
-			break;
-		}
-		msleep(FTS_RETRIES_DELAY_ECC_CAL);
-	}
-
-	/* read out check sum */
-	wbuf[0] = FTS_CMD_ECC_READ;
-	ret = fts_read(wbuf, 1, reg_val, 1);
-	if (ret < 0) {
-		FTS_ERROR( "ecc read cmd write fail");
-		return ret;
-	}
-	ecc_in_tp = reg_val[0];
 
 	FTS_INFO("ecc in tp:%x, host:%x", ecc_in_tp, ecc_in_host);
 	if (ecc_in_tp != ecc_in_host) {
@@ -175,14 +128,14 @@ fw_reset:
 	return -EIO;
 }
 
-struct upgrade_func upgrade_func_ft5452 = {
-	.ctype = {0x81},
-	.fwveroff = 0x010E,
-	.fwcfgoff = 0x1FFB0,
+struct upgrade_func upgrade_func_ft5x46 = {
+	.ctype = {0x02},
+	.fwveroff = 0x0000,
+	.fwcfgoff = 0xD780,
 	.appoff = 0x0000,
 	.pramboot_supported = false,
 	.hid_supported = true,
-	.upgrade = fts_ft5452_upgrade,
+	.upgrade = fts_ft5x46_upgrade,
 };
 
 
