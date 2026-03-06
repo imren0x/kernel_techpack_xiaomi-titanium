@@ -157,6 +157,7 @@ struct upgrade_func upgrade_func_ft5x46 = {
 	.appoff = 0x0000,
 	.pramboot_supported = false,
 	.hid_supported = true,
+	.init = fts_ft5x46_init,
 	.upgrade = fts_ft5x46_upgrade,
 };
 
