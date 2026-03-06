@@ -1,12 +1,10 @@
-&firmware {
-	android {
-		/delete-node/ vbmeta;
-		fstab {
-			vendor {
-				fsmgr_flags = "wait,slotselect";
-			};
-		};
-	};
+/ {
+        firmware: firmware {
+                android {
+			/delete-node/ fstab;
+                        /delete-node/ vbmeta;
+                };
+        };
 };
 
 #include "daikura.dtsi"
