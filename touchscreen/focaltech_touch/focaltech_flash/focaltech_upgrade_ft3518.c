@@ -31,7 +31,29 @@
 /*****************************************************************************
 * 1.Included header files
 *****************************************************************************/
+#include "../focaltech_core.h"
 #include "../focaltech_flash.h"
+
+/*****************************************************************************
+* Static function prototypes
+*****************************************************************************/
+static int fts_ft5x46_init(void)
+{
+	struct fts_upgrade *upg = fwupgrade;
+
+	if (NULL == upg) {
+		FTS_ERROR("upg is null");
+		return -EINVAL;
+	}
+
+	if (upg->fw_length < FTS_MIN_LEN) {
+		FTS_ERROR("fw length fail");
+		return -EINVAL;
+	}
+
+	upgrade_func_ft5x46.fwveroff = upg->fw_length - 2;
+	return 0;
+}
 
 /************************************************************************
 * Name: fts_ft5x46_upgrade
