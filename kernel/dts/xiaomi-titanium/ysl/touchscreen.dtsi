@@ -62,12 +62,11 @@
 		interrupts = <65 0x2>;
 		vdd-supply = <&pm8953_l10>;
 		vcc_i2c-supply = <&pm8953_l6>;
-		/* pins used by touchscreen */
-                pinctrl-names = "pmx_ts_irqrst_active","pmx_ts_irqrst_suspend",
-                    "pmx_ts_irqrst_release";
-                pinctrl-0 = <&ts_int_active &ts_reset_active>;
-                pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
-                pinctrl-2 = <&ts_as_int &ts_as_reset>;
+		pinctrl-names = "pmx_ts_active","pmx_ts_suspend",
+					"pmx_ts_release";
+		pinctrl-0 = <&ts_int_active &ts_reset_active>;
+		pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
+		pinctrl-2 = <&ts_release>;
 		focaltech,name = "fts_ts";
 		focaltech,reset-gpio = <&tlmm 64 0x00>;
 		//focaltech,power_ldo-gpio = <&tlmm 0 0x00>;
