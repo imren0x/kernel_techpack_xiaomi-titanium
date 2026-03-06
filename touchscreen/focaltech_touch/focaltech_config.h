@@ -165,6 +165,9 @@
 #define _FT8606     0x86060808
 #define _FTE716     0xE716080a
 
+#define _FT3519             0x35190489
+#define _FT8057             0x80570828
+
 /******************* Enables *********************/
 /*********** 1 to enable, 0 to disable ***********/
 
