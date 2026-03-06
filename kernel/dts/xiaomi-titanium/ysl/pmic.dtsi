@@ -20,6 +20,7 @@
 				qcom,use-bark;
 			};
 		};
+		/delete-node/ qcom,pm8953_typec@bf00;
 	};
 };
 
@@ -118,6 +119,7 @@ chan@11 {
 &usb3 {
 	qcom,usbin-vadc = <&pmi8940_vadc>;
 	qcom,detect-dpdm-floating;
+	vbus_dwc3-supply = <&smbcharger_charger_otg>;
 	extcon = <&qpnp_smbcharger>;
 };
 
