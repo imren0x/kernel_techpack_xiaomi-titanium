@@ -234,8 +234,8 @@
  * FTS_GET_MODULE_NUM >= 2, compatible with FTS_MODULE2_ID
  * FTS_GET_MODULE_NUM >= 3, compatible with FTS_MODULE3_ID
  */
-#define FTS_MODULE_ID                          0x0000
-#define FTS_MODULE2_ID                         0xd566
+#define FTS_MODULE_ID                          0x37
+#define FTS_MODULE2_ID                         0x34
 #define FTS_MODULE3_ID                         0x0000
 
 /*
