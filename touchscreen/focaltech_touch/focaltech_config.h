@@ -234,7 +234,7 @@
  * FTS_GET_MODULE_NUM >= 2, compatible with FTS_MODULE2_ID
  * FTS_GET_MODULE_NUM >= 3, compatible with FTS_MODULE3_ID
  */
-#define FTS_MODULE_ID                          0x37
+#define FTS_MODULE_ID                          0x34
 #define FTS_MODULE2_ID                         0x34
 #define FTS_MODULE3_ID                         0x0000
 
@@ -255,7 +255,7 @@
  * define your own fw_file, the sample one to be replaced is invalid
  * NOTE: if FTS_GET_MODULE_NUM > 1, it's the fw corresponding with FTS_VENDOR_ID
  */
-#define FTS_UPGRADE_FW_FILE                    "include/firmware/LQ_E6_FT5446_Ofilm_EBBG_V0f_D01_20180820_app.i"
+#define FTS_UPGRADE_FW_FILE                    "include/firmware/LQ_E6_FT5446_Ofilm_Auo_V0a_D01_20180820_app.i"
 
 /*
  * if FTS_GET_MODULE_NUM >= 2, fw corrsponding with FTS_VENDOR_ID2
@@ -267,7 +267,7 @@
  * if FTS_GET_MODULE_NUM >= 3, fw corrsponding with FTS_VENDOR_ID3
  * define your own fw_file, the sample one is invalid
  */
-#define FTS_UPGRADE_FW3_FILE                   "include/firmware/FT8716_app_sample.i"
+#define FTS_UPGRADE_FW3_FILE                   "include/firmware/LQ_E6_FT5446_Ofilm_Auo_V0a_D01_20180820_app.i"
 
 /*********************************************************/
 
