@@ -75,9 +75,5 @@
 		focaltech,display-coords = <0 0 720 1440>;
 		focaltech,max-touch-number = <10>;
 		/*focaltech,have-key;
-		focaltech,key-number = <3>;
-		focaltech,keys = <139 172 158>;
-		focaltech,key-y-coord = <1350>;
-		focaltech,key-x-coords = <180 350 540>;*/
 	};
 };

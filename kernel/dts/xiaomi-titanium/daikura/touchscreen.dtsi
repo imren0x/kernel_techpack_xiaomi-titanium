@@ -21,9 +21,5 @@
 		focaltech,panel-coords = <0 0 1080 2280>;
 		focaltech,max-touch-number = <10>;
 		/*focaltech,have-key;
-		focaltech,key-number = <3>;
-		focaltech,keys = <139 172 158>;
-		focaltech,key-y-coord = <2040>;
-		focaltech,key-x-coords = <200 500 800>;*/
 	};
 };
