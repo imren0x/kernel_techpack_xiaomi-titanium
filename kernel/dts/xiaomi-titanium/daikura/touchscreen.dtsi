@@ -20,6 +20,5 @@
 		focaltech,display-coords = <0 0 1080 2280>;
 		focaltech,panel-coords = <0 0 1080 2280>;
 		focaltech,max-touch-number = <10>;
-		/*focaltech,have-key;
 	};
 };

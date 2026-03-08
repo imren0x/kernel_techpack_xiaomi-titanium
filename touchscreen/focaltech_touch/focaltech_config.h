@@ -205,7 +205,7 @@
  * Pinctrl enable
  * default: disable
  */
-#define FTS_PINCTRL_EN                          0
+#define FTS_PINCTRL_EN                          1
 
 /*
  * Customer power enable
