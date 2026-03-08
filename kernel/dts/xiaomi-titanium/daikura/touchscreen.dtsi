@@ -1,7 +1,7 @@
 &i2c_3 {
 	status = "ok";
 	focaltech@38{
-		compatible = "focaltech,fts_ts-mi8953";
+		compatible = "focaltech,5446";
 		reg = <0x38>;
 		interrupt-parent = <&tlmm>;
 		interrupts = <65 0x2>;
