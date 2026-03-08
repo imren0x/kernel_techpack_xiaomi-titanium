@@ -266,12 +266,20 @@
  * 0:No check vendor_id (default)
  * 1/2/3: Check vendor_id for vendor compatibility
  */
+#if (defined CONFIG_MACH_XIAOMI_SAKURA) || (defined CONFIG_MACH_XIAOMI_DAISY)
 #define FTS_GET_VENDOR_ID_NUM                   1
-
-/*Add by HQ-zmc [Date: 2018-02-12 14:51:50]
- *We use LCD VENDOR NUM
-*/
 #define D1S_LCD_VENDOR_NUM                      3
+#endif
+
+#ifdef CONFIG_MACH_XIAOMI_YSL
+#define FTS_GET_VENDOR_ID_NUM                   2
+#define D1S_LCD_VENDOR_NUM                      3
+#endif
+
+#ifdef CONFIG_MACH_XIAOMI_MIDO
+#define FTS_GET_VENDOR_ID_NUM                   2
+#define D1S_LCD_VENDOR_NUM                      2
+#endif
 
 /*
  * vendor_id(s) for vendor(s) to be compatible with.
@@ -282,38 +290,56 @@
  * FTS_GET_VENDOR_ID_NUM >= 2, compatible with FTS_VENDOR_ID2
  * FTS_GET_VENDOR_ID_NUM >= 3, compatible with FTS_VENDOR_ID3
  */
-#define FTS_VENDOR_ID                          0x51 			/*ofilm+FT5446*/
+
+#if (defined CONFIG_MACH_XIAOMI_SAKURA) || (defined CONFIG_MACH_XIAOMI_DAISY)
+#define FTS_VENDOR_ID                          0x51
 #define FTS_VENDOR_ID2                         0x0000
 #define FTS_VENDOR_ID3                         0x0000
+#define D1S_VENDOR_LD						   0x36
+#define D1S_VENDOR_LD2						 0x37 			 
+#define D1S_VENDOR_LD3             0x42
+#endif
 
-/*Add by HQ-zmc [Date: 2018-02-12 14:37:48]
-  LCD vendor lockdown info
-*/
-#define D1S_VENDOR_LD						   0x36              /*ofilm+TM*/
+#ifdef CONFIG_MACH_XIAOMI_YSL
+#define FTS_VENDOR_ID                          0x37
+#define FTS_VENDOR_ID2                         0x34
+#define FTS_VENDOR_ID3                         0x0000
+#define D1S_VENDOR_LD						   0x37
+#define D1S_VENDOR_LD2						 0x34 			 
+#define D1S_VENDOR_LD3             0x0000
+#endif
 
-#define D1S_VENDOR_LD2						   0x37 			 /*ofilm+EBBG*/
-
-#define D1S_VENDOR_LD3                         0x42              /*ofilm+CSOT*/
+#ifdef CONFIG_MACH_XIAOMI_MIDO
+#define FTS_VENDOR_ID                          0x37
+#define FTS_VENDOR_ID2                         0x34
+#define FTS_VENDOR_ID3                         0x0000
+#define D1S_VENDOR_LD						   0x3b
+#define D1S_VENDOR_LD2						 0x51 			 
+#define D1S_VENDOR_LD3             0x0000
+#endif
 
 
 /*
  * FW.i file for auto upgrade, you must replace it with your own
  * define your own fw_file, the sample one to be replaced is invalid
- * NOTE: if FTS_GET_VENDOR_ID_NUM > 1, it's the fw corresponding with FTS_VENDOR_ID
  */
+#if (defined CONFIG_MACH_XIAOMI_SAKURA) || (defined CONFIG_MACH_XIAOMI_DAISY)
 #define FTS_UPGRADE_FW_FILE                      "include/firmware/D1S_1_FT5446_Ofilm_TM_V07_D01_20180613_app.i"
-
-/*
- * if FTS_GET_VENDOR_ID_NUM >= 2, fw corrsponding with FTS_VENDOR_ID2
- * define your own fw_file, the sample one is invalid
- */
 #define FTS_UPGRADE_FW2_FILE                     "include/firmware/D1S_2_FT5446_Ofilm_TM_Black_V01_D01_20171219_app.i"
-
-/*
- * if FTS_GET_VENDOR_ID_NUM >= 3, fw corrsponding with FTS_VENDOR_ID3
- * define your own fw_file, the sample one is invalid
- */
 #define FTS_UPGRADE_FW3_FILE                     "include/firmware/D1S_1_FT5446_Ofilm_HuaXing_V0C_D01_20180711_app.i"
+#endif
+
+#ifdef CONFIG_MACH_XIAOMI_YSL
+#define FTS_UPGRADE_FW_FILE                      "include/firmware/LQ_E6_FT5446_Ofilm_EBBG_V0f_D01_20180820_app.i"
+#define FTS_UPGRADE_FW2_FILE                     "include/firmware/LQ_E6_FT5446_Ofilm_Auo_V0a_D01_20180820_app.i"
+#define FTS_UPGRADE_FW3_FILE                     "include/firmware/LQ_E6_FT5446_Ofilm_Truly_V03_D01_20171227_app.i"
+#endif
+
+#ifdef CONFIG_MACH_XIAOMI_MIDO
+#define FTS_UPGRADE_FW_FILE                      "include/firmware/HQ_AL1512_C6_FT5435_Biel0x3b_Ver0a_20170119_app.i"
+#define FTS_UPGRADE_FW2_FILE                     "include/firmware/HQ_AL1512_C6_FT5435_Ofilm0x51_Ver0a_20170119_app.i"
+#define FTS_UPGRADE_FW3_FILE                     "include/firmware/FT8716_app_sample.i"
+#endif
 
 /**
  * ============================
@@ -323,9 +349,23 @@
  * @vendor info of each vendor
  * ============================
  */
+#if (defined CONFIG_MACH_XIAOMI_SAKURA) || (defined CONFIG_MACH_XIAOMI_DAISY)
 #define FTS_VENDOR_INFO							"[Vendor]Ofilm(TP) + TM(LCD), [TP-IC]FT5446,[FW]Ver"
 #define FTS_VENDOR_INFO2						"[Vendor]Ofilm(TP) + EBBG(LCD), [TP-IC]FT5446,[FW]Ver"
 #define FTS_VENDOR_INFO3						"[Vendor]Ofilm(TP) + CSOT(LCD), [TP-IC]FT5446,[FW]Ver"
+#endif
+
+#ifdef CONFIG_MACH_XIAOMI_YSL
+#define FTS_VENDOR_INFO							"[Vendor]Ofilm(TP) + EBBG(LCD), [TP-IC]FT5446,[FW]Ver"
+#define FTS_VENDOR_INFO2						"[Vendor]Ofilm(TP) + AUO(LCD), [TP-IC]FT5446,[FW]Ver"
+#define FTS_VENDOR_INFO3						"[Vendor]Ofilm(TP) + TRULY(LCD), [TP-IC]FT5446,[FW]Ver"
+#endif
+
+#ifdef CONFIG_MACH_XIAOMI_MIDO
+#define FTS_VENDOR_INFO							"[Vendor]Ofilm(TP) + 0x3b(LCD), [TP-IC]FT5435,[FW]Ver"
+#define FTS_VENDOR_INFO2						"[Vendor]Ofilm(TP) + 0x51(LCD), [TP-IC]FT5435,[FW]Ver"
+#define FTS_VENDOR_INFO3						"[Vendor]Ofilm(TP) + [TP-IC]FT5435,[FW]Ver"
+#endif
 
 #define HQ_CTP_HWINFO_REGISTER		1
 #define HQ_LOCK_DOWN_INFO           1
