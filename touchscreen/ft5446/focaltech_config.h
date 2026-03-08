@@ -36,20 +36,38 @@
 #define _FT8716             0x87160805
 #define _FT8736             0x87360806
 #define _FT8006M            0x80060807
-#define _FT8201             0x82010807
-#define _FT7250             0x72500807
-#define _FT8606             0x86060808
 #define _FT8607             0x86070809
-#define _FTE716             0xE716080A
 #define _FT8006U            0x8006D80B
+#define _FT8006S            0x8006A80B
 #define _FT8613             0x8613080C
+#define _FT8719             0x8719080D
+#define _FT8739             0x8739080E
+#define _FT8615             0x8615080F
+#define _FT8201             0x82010810
+#define _FT8006P            0x86220811
+#define _FT7251             0x72510812
+#define _FT7252             0x72520813
+#define _FT8613S            0x8613C814
+#define _FT8756             0x87560815
+#define _FT8302             0x83020816
+#define _FT8009             0x80090817
+#define _FT8656             0x86560818
+#define _FT8006S_AA         0x86320819
+#define _FT7250             0x7250081A
+#define _FT7120             0x7120081B
+#define _FT8720             0x8720081C
+#define _FT8726             0x8726081C
+#define _FT8016             0x8016081D
 
+#define _FT5336             0x53360402
 #define _FT5416             0x54160402
+#define _FT5422U            0x5446C482
 #define _FT5426             0x54260402
 #define _FT5435             0x54350402
 #define _FT5436             0x54360402
 #define _FT5526             0x55260402
 #define _FT5526I            0x5526B402
+#define _FT5X46             0x54220402
 #define _FT5446             0x54460402
 #define _FT5346             0x53460402
 #define _FT5446I            0x5446B402
@@ -64,6 +82,7 @@
 #define _FT3327             0x33270402
 #define _FT3427             0x34270402
 #define _FT7311             0x73110402
+#define _FT5526_V00         0x5526C402
 
 #define _FT5626             0x56260401
 #define _FT5726             0x57260401
@@ -80,11 +99,73 @@
 #define _FT6336G            0x6336A003
 #define _FT6336U            0x6336D003
 #define _FT6436U            0x6436D003
+#define _FT6436T            0x6436E003
 
 #define _FT3267             0x32670004
 #define _FT3367             0x33670004
-#define _FT5422U            0x5422D482
-#define _FT3327DQQ_001      0x3327D482
+
+#define _FT3327DQQ_XXX      0x3327D482
+#define _FT5446DQS_XXX      0x5446D482
+
+#define _FT3427_003         0x3427D482
+#define _FT3427G_003        0x3427A482
+#define _FT5446_003         0x5446D482
+#define _FT5446_Q03         0x5446C482
+#define _FT5446_P03         0x5446A481
+#define _FT5426_003         0x5426D482
+#define _FT5526_003         0x5526D482
+
+#define _FT3518             0x35180481
+#define _FT3518U            0x3518D481
+#define _FT3558             0x35580481
+#define _FT3528             0x35280481
+#define _FT5536             0x55360481
+#define _FT5536L            0x5536E481
+#define _FT3418             0x34180481
+
+#define _FT5446U            0x5446D083
+#define _FT5456U            0x5456D083
+#define _FT3417U            0x3417D083
+#define _FT5426U            0x5426D083
+#define _FT3428             0x34280083
+#define _FT3437U            0x3437D083
+
+#define _FT7302             0x73020084
+#define _FT7202             0x72020084
+#define _FT3308             0x33080084
+#define _FT6446             0x64460084
+
+#define _FT6346U            0x6346D085
+#define _FT6346G            0x6346A085
+#define _FT3067             0x30670085
+#define _FT3068             0x30680085
+#define _FT3168             0x31680085
+#define _FT3268             0x32680085
+#define _FT6146             0x61460085
+
+#define _FT5726_003         0x5726D486
+#define _FT5726_V03         0x5726C486
+
+#define _FT3618             0x36180487
+#define _FT5646             0x56460487
+#define _FT3A58             0x3A580487
+#define _FT3B58             0x3B580487
+#define _FT3D58             0x3D580487
+#define _FT5936             0x59360487
+#define _FT5A36             0x5A360487
+#define _FT5B36             0x5B360487
+#define _FT5D36             0x5D360487
+#define _FT5946             0x59460487
+#define _FT5A46             0x5A460487
+#define _FT5B46             0x5B460487
+#define _FT5D46             0x5D460487
+
+#define _FT3658U            0x3658D488
+#define _FT8606     0x86060808
+#define _FTE716     0xE716080a
+
+#define _FT3519             0x35190489
+#define _FT8057             0x80570828
 
 /*************************************************/
 
