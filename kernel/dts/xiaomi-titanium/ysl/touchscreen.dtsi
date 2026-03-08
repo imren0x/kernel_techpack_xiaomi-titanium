@@ -56,7 +56,8 @@
 	};
 
 	focaltech@38{
-		compatible = "focaltech,5446";
+		compatible = "focaltech,fts_ts-mi8953";
+		focaltech,ic-type = <>; // Unknown
 		reg = <0x38>;
 		interrupt-parent = <&tlmm>;
 		interrupts = <65 0x2>;
@@ -75,5 +76,6 @@
 		focaltech,display-coords = <0 0 720 1440>;
 		focaltech,max-touch-number = <10>;
 		/*focaltech,have-key;
+		focaltech,ignore-id-check;
 	};
 };
