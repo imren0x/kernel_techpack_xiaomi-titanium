@@ -21,7 +21,7 @@
 
 #include <linux/kthread.h>
 #include "gt9xx.h"
-#include "../lct_tp_fm_info_e6.h"
+#include <xiaomi-titanium/lct_tp_fm_info_e6.h>
 
 #include <linux/namei.h>
 #include <linux/mount.h>

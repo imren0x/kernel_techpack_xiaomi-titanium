@@ -30,7 +30,7 @@
 #endif
 
 
-#include "../lct_tp_fm_info_e6.h"
+#include <xiaomi-titanium/lct_tp_fm_info_e6.h>
 #ifdef SUPPORT_READ_TP_VERSION
 	char product_id[GTP_PRODUCT_ID_MAXSIZE];
 	char fw_version[64];
