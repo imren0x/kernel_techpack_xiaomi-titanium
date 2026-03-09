@@ -1898,7 +1898,9 @@ static int fb_notifier_callback(struct notifier_block *self,
 	if (evdata && evdata->data && event == FB_EVENT_BLANK &&
 			ist_data && ist_data->client) {
 		blank = evdata->data;
-		if (*blank == FB_BLANK_UNBLANK)
+		if (*blank == FB_BLANK_UNBLANK
+				|| *blank == FB_BLANK_NORMAL
+				|| *blank == FB_BLANK_VSYNC_SUSPEND)
 			ist30xx_resume(&ist_data->client->dev);
 		else if (*blank == FB_BLANK_POWERDOWN)
 			ist30xx_suspend(&ist_data->client->dev);
