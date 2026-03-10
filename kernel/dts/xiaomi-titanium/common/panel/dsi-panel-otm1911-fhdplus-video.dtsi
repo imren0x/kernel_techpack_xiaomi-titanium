@@ -108,11 +108,6 @@
 		qcom,mdss-dsi-lane-3-state;
 		qcom,mdss-dsi-panel-timings = [f7 3c 28 00 6e 70
 			22 40 31 03 04 00];
-		qcom,mdss-dsi-panel-timings-phy-v2 = [25 1f 09 0a 06 03 04 a0
-			25 1f 09 0a 06 03 04 a0
-			25 1f 09 0a 06 03 04 a0
-			25 1f 09 0a 06 03 04 a0
-			25 1e 08 0a 06 03 04 a0];
 		qcom,mdss-dsi-t-clk-post = <0x0E>;
 		qcom,mdss-dsi-t-clk-pre = <0x34>;
 		qcom,mdss-dsi-bl-min-level = <1>;
