@@ -3,7 +3,7 @@
 		focaltech@38 {
 			compatible = "focaltech,fts_ts-mi8953";
 			focaltech,ic-type = <>; // Unknown
-			focaltech,key-y-coords = <1350 1350 1350>;
+			focaltech,key-y-coords = <2040 2040 2040>;
 			reg = <0x38>;
 			interrupt-parent = <&tlmm>;
 			interrupts = <65 0x2008>;
@@ -22,8 +22,8 @@
 			focaltech,num-max-touches = <10>;
 			focaltech,have-key;
 			focaltech,key-number = <3>;
-			focaltech,keys = <139 172 158>;
-			focaltech,key-x-coords = <180 350 540>;
+			focaltech,keys = <172 139 158>;
+			focaltech,key-x-coords = <500 200 800>;
 			focaltech,ignore-id-check;
 		};
 
