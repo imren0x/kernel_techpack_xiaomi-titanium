@@ -2,6 +2,17 @@
 #
 # Novatek NT36XXX touchscreen driver configuration
 #
+
+config TOUCHSCREEN_NT36XXX
+	tristate "Novatek NT36XXX over I2C"
+	depends on I2C
+	help
+	  Say Y here if you have a Novatek NT36XXX over I2C touchscreen connected
+	  to your system.
+	  Say M, compile into a module.
+
+	  If unsure, say N.
+
 config TOUCHSCREEN_NT36XXX_I2C
 	tristate "Novatek NT36XXX over I2C"
 	help
