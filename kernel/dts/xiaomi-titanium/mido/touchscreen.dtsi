@@ -25,6 +25,7 @@
 			focaltech,keys = <172 139 158>;
 			focaltech,key-x-coords = <500 200 800>;
 			focaltech,ignore-id-check;
+			focaltech,charger-detect;
 		};
 
 		imagis@50 {
