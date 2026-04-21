@@ -92,7 +92,7 @@
 
 &soc {
 	pwm_ir {
-    	compatible = "pwm-ir";
+    	compatible = "pwm-ir-mi8953";
         pwms = <&pmi8950_pwm 0 0>;
         reg-id = "vdd";
         vdd-supply = <&pm8953_l8>;
