@@ -1,4 +1,7 @@
 /* msm-pm8953 */
+
+#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+
 &spmi_bus {
 	qcom,pm8953@0 {
 		qcom,power-on@800 {
@@ -41,6 +44,22 @@
 				qcom,mode = "manual";
 				qcom,source-sel = <1>;
 				qcom,mode-ctrl = <0x61>;
+			};
+		};
+	};
+
+	qcom,pmi8950@2 {
+		pmi8950_gpios: gpios {
+			pinctrl-names = "default";
+			pinctrl-0 = <&pwm_ir_default>;
+
+			pwm_ir_default: pmi8950_gpio1 {
+				status = "okay";
+				pins = "gpio1";
+				output-low;
+				bias-pull-down;
+				function = "func1";
+				qcom,drive-strength = <PMIC_GPIO_STRENGTH_MED>;
 			};
 		};
 	};
