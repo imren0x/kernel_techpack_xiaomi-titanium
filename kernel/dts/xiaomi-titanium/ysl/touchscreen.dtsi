@@ -19,6 +19,7 @@
 		focaltech,display-coords = <0 0 720 1440>;
 		focaltech,max-touch-number = <10>;
 		focaltech,ignore-id-check;
+		focaltech,charger-detect;
 	};
 
 	goodix@5d{
