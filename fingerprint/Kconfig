@@ -1,6 +1,3 @@
 source "techpack/xiaomi-titanium/fingerprint/fpc/Kconfig"
-source "techpack/xiaomi-titanium/fingerprint/fpc_ysl/Kconfig"
-source "techpack/xiaomi-titanium/fingerprint/fpc_mido/Kconfig"
 source "techpack/xiaomi-titanium/fingerprint/goodix/Kconfig"
 source "techpack/xiaomi-titanium/fingerprint/goodix_ysl/Kconfig"
-source "techpack/xiaomi-titanium/fingerprint/goodix_mido/Kconfig"
