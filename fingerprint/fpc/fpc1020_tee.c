@@ -18,6 +18,7 @@
  *
  *
  * Copyright (c) 2015 Fingerprint Cards AB <tech@fingerprints.com>
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License Version 2
@@ -35,13 +36,15 @@
 #include <linux/of_gpio.h>
 #include <linux/platform_device.h>
 #include <linux/regulator/consumer.h>
+#ifdef CONFIG_MACH_XIAOMI_YSL
+#include <linux/proc_fs.h>
+#endif
 #include <linux/notifier.h>
 #include <linux/fb.h>
 #include <linux/mdss_io_util.h>
 
 #define FPC_TTW_HOLD_TIME 2000
-#define FP_UNLOCK_REJECTION_TIMEOUT  (FPC_TTW_HOLD_TIME - 500)
-
+#define FP_UNLOCK_REJECTION_TIMEOUT (FPC_TTW_HOLD_TIME - 500)
 #define RESET_LOW_SLEEP_MIN_US 5000
 #define RESET_LOW_SLEEP_MAX_US (RESET_LOW_SLEEP_MIN_US + 100)
 #define RESET_HIGH_SLEEP1_MIN_US 100
@@ -52,6 +55,13 @@
 #define PWR_ON_SLEEP_MAX_US (PWR_ON_SLEEP_MIN_US + 900)
 
 #define NUM_PARAMS_REG_ENABLE_SET 2
+#ifdef CONFIG_MACH_XIAOMI_YSL
+#define PROC_NAME  "hwinfo"
+
+#define tyt_debug printk("tyt %s:%d\n", __func__, __LINE__)
+static struct proc_dir_entry *proc_entry;
+extern int fpsensor;
+#endif
 
 static const char * const pctl_names[] = {
 	"fpc1020_reset_reset",
@@ -84,18 +94,21 @@ struct fpc1020_data {
 	int rst_gpio;
 	struct mutex lock; /* To set/get exported values in sysfs */
 	bool prepared;
+#ifndef CONFIG_MACH_XIAOMI_YSL
 	bool compatible_enabled;
+#endif
 	atomic_t wakeup_enabled; /* Used both in ISR and non-ISR */
 	struct notifier_block fb_notifier;
 	bool fb_black;
 	bool wait_finger_down;
 	struct work_struct work;
 };
-
+#ifndef CONFIG_MACH_XIAOMI_YSL
 static irqreturn_t fpc1020_irq_handler(int irq, void *handle);
 static int fpc1020_request_named_gpio(struct fpc1020_data *fpc1020,
 		const char *label, int *gpio);
 static int hw_reset(struct  fpc1020_data *fpc1020);
+#endif
 
 static int vreg_setup(struct fpc1020_data *fpc1020, const char *name,
 	bool enable)
@@ -180,6 +193,30 @@ static ssize_t clk_enable_set(struct device *dev,
 	return count;
 }
 static DEVICE_ATTR(clk_enable, S_IWUSR, NULL, clk_enable_set);
+#ifdef CONFIG_MACH_XIAOMI_YSL
+static ssize_t fingerdown_wait_set(struct device *dev,
+	struct device_attribute *attr,
+	const char *buf, size_t count)
+ {
+	struct fpc1020_data *fpc1020 = dev_get_drvdata(dev);
+
+	dev_dbg(fpc1020->dev, "%s\n", __func__);
+	if (!strncmp(buf, "enable", strlen("enable"))){
+
+		fpc1020->wait_finger_down = true;
+	}
+	else if (!strncmp(buf, "disable", strlen("disable"))){
+
+		fpc1020->wait_finger_down = false;
+	}
+	else
+		return -EINVAL;
+
+	return count;
+}
+static DEVICE_ATTR(fingerdown_wait, S_IWUSR, NULL, fingerdown_wait_set);
+#endif
+
 
 /**
  * Will try to select the set of pins (GPIOS) defined in a pin control node of
@@ -338,6 +375,7 @@ static int device_prepare(struct fpc1020_data *fpc1020, bool enable)
 		if (rc)
 			goto exit_2;
 
+
 		usleep_range(PWR_ON_SLEEP_MIN_US, PWR_ON_SLEEP_MAX_US);
 
 		/* As we can't control chip select here the other part of the
@@ -441,7 +479,7 @@ static ssize_t irq_ack(struct device *dev,
 	return count;
 }
 static DEVICE_ATTR(irq, S_IRUSR | S_IWUSR, irq_get, irq_ack);
-
+#ifndef CONFIG_MACH_XIAOMI_YSL
 static ssize_t fingerdown_wait_set(struct device *dev,
 	struct device_attribute *attr,
 	const char *buf, size_t count)
@@ -553,6 +591,7 @@ exit:
 	return -EINVAL;
 }
 static DEVICE_ATTR(compatible_all, S_IWUSR, NULL, compatible_all_set);
+#endif
 
 static struct attribute *attributes[] = {
 	&dev_attr_pinctl_set.attr,
@@ -563,38 +602,38 @@ static struct attribute *attributes[] = {
 	&dev_attr_clk_enable.attr,
 	&dev_attr_irq.attr,
 	&dev_attr_fingerdown_wait.attr,
+#ifndef CONFIG_MACH_XIAOMI_YSL
 	&dev_attr_compatible_all.attr,
+#endif
 	NULL
 };
 
 static const struct attribute_group attribute_group = {
 	.attrs = attributes,
 };
-
+#ifndef CONFIG_MACH_XIAOMI_YSL
 static void notification_work(struct work_struct *work)
 {
 	mdss_prim_panel_fb_unblank(FP_UNLOCK_REJECTION_TIMEOUT);
 	printk("unblank\n");
 }
-
+#endif
 static irqreturn_t fpc1020_irq_handler(int irq, void *handle)
 {
 	struct fpc1020_data *fpc1020 = handle;
 
-	dev_err(fpc1020->dev, "%s\n", __func__);
+	dev_dbg(fpc1020->dev, "%s\n", __func__);
 
 	if (atomic_read(&fpc1020->wakeup_enabled)) {
-		__pm_wakeup_event(fpc1020->ttw_wl,
-					msecs_to_jiffies(FPC_TTW_HOLD_TIME));
+		__pm_wakeup_event(fpc1020->ttw_wl, FPC_TTW_HOLD_TIME);
 	}
 
 	sysfs_notify(&fpc1020->dev->kobj, NULL, dev_attr_irq.attr.name);
-	if (fpc1020->wait_finger_down && fpc1020->fb_black) {
-		printk("%s enter\n", __func__);
-		fpc1020->wait_finger_down = false;
-		schedule_work(&fpc1020->work);
-	}
+       	if (fpc1020->wait_finger_down && fpc1020->fb_black) {
 
+		fpc1020->wait_finger_down = false;
+		// schedule_work(&fpc1020->work);
+	}
 	return IRQ_HANDLED;
 }
 
@@ -654,15 +693,40 @@ static int fpc_fb_notif_callback(struct notifier_block *nb,
 	return NOTIFY_OK;
 }
 
+
 static struct notifier_block fpc_notif_block = {
 	.notifier_call = fpc_fb_notif_callback,
 };
+#ifdef CONFIG_MACH_XIAOMI_YSL
+static int proc_show_ver(struct seq_file *file, void *v)
+{
+	seq_printf(file, "Fingerprint: FPC\n");
+	return 0;
+}
+
+static int proc_open(struct inode *inode, struct file *file)
+{
+	printk("fpc proc_open\n");
+	single_open(file, proc_show_ver, NULL);
+	return 0;
+}
+
+static const struct file_operations proc_file_fpc_ops = {
+	.owner = THIS_MODULE,
+	.open = proc_open,
+	.read = seq_read,
+	.release = single_release,
+};
+#endif
 
 static int fpc1020_probe(struct platform_device *pdev)
 {
 	struct device *dev = &pdev->dev;
 	int rc = 0;
-
+#ifdef CONFIG_MACH_XIAOMI_YSL
+	size_t i;
+	int irqf;
+#endif
 	struct device_node *np = dev->of_node;
 	struct fpc1020_data *fpc1020 = devm_kzalloc(dev, sizeof(*fpc1020),
 			GFP_KERNEL);
@@ -673,6 +737,12 @@ static int fpc1020_probe(struct platform_device *pdev)
 		rc = -ENOMEM;
 		goto exit;
 	}
+#ifdef CONFIG_MACH_XIAOMI_YSL
+	if(fpsensor != 1){
+                 pr_err("Macle fpc1020_probe failed as fpsensor=%d(1=fp)\n", fpsensor);
+                 return -1;
+         }
+#endif
 
 	fpc1020->dev = dev;
 	platform_set_drvdata(pdev, fpc1020);
@@ -682,8 +752,75 @@ static int fpc1020_probe(struct platform_device *pdev)
 		rc = -EINVAL;
 		goto exit;
 	}
+#ifdef CONFIG_MACH_XIAOMI_YSL
+	rc = fpc1020_request_named_gpio(fpc1020, "fpc,gpio_irq",
+			&fpc1020->irq_gpio);
+	if (rc)
+		goto exit;
+	rc = fpc1020_request_named_gpio(fpc1020, "fpc,gpio_rst",
+			&fpc1020->rst_gpio);
+	if (rc)
+		goto exit;
+
+	fpc1020->fingerprint_pinctrl = devm_pinctrl_get(dev);
+	if (IS_ERR(fpc1020->fingerprint_pinctrl)) {
+		if (PTR_ERR(fpc1020->fingerprint_pinctrl) == -EPROBE_DEFER) {
+			dev_info(dev, "pinctrl not ready\n");
+			rc = -EPROBE_DEFER;
+			goto exit;
+		}
+		dev_err(dev, "Target does not use pinctrl\n");
+		fpc1020->fingerprint_pinctrl = NULL;
+		rc = -EINVAL;
+		goto exit;
+	}
+
+	for (i = 0; i < ARRAY_SIZE(fpc1020->pinctrl_state); i++) {
+		const char *n = pctl_names[i];
+		struct pinctrl_state *state =
+			pinctrl_lookup_state(fpc1020->fingerprint_pinctrl, n);
+		if (IS_ERR(state)) {
+			dev_err(dev, "cannot find '%s'\n", n);
+			rc = -EINVAL;
+			goto exit;
+		}
+		dev_info(dev, "found pin control %s\n", n);
+		fpc1020->pinctrl_state[i] = state;
+	}
+
+	rc = select_pin_ctl(fpc1020, "fpc1020_reset_reset");
+	if (rc)
+		goto exit;
+	rc = select_pin_ctl(fpc1020, "fpc1020_irq_active");
+	if (rc)
+		goto exit;
+
+	atomic_set(&fpc1020->wakeup_enabled, 0);
+
+	irqf = IRQF_TRIGGER_RISING | IRQF_ONESHOT;
+	if (of_property_read_bool(dev->of_node, "fpc,enable-wakeup")) {
+		irqf |= IRQF_NO_SUSPEND;
+		device_init_wakeup(dev, 1);
+	}
+#endif
 
 	mutex_init(&fpc1020->lock);
+#ifdef CONFIG_MACH_XIAOMI_YSL
+	rc = devm_request_threaded_irq(dev, gpio_to_irq(fpc1020->irq_gpio),
+			NULL, fpc1020_irq_handler, irqf,
+			dev_name(dev), fpc1020);
+	if (rc) {
+		dev_err(dev, "could not request irq %d\n",
+				gpio_to_irq(fpc1020->irq_gpio));
+		goto exit;
+	}
+
+	dev_dbg(dev, "requested irq %d\n", gpio_to_irq(fpc1020->irq_gpio));
+
+	/* Request that the interrupt should be wakeable */
+	enable_irq_wake(gpio_to_irq(fpc1020->irq_gpio));
+#endif
+
 	fpc1020->ttw_wl = wakeup_source_register(NULL, "fpc_ttw_wl");
 
 	rc = sysfs_create_group(&dev->kobj, &attribute_group);
@@ -691,15 +828,33 @@ static int fpc1020_probe(struct platform_device *pdev)
 		dev_err(dev, "could not create sysfs\n");
 		goto exit;
 	}
+#ifdef CONFIG_MACH_XIAOMI_YSL
+	if (of_property_read_bool(dev->of_node, "fpc,enable-on-boot")) {
+		dev_info(dev, "Enabling hardware\n");
+		(void)device_prepare(fpc1020, true);
+	}
+
+	rc = hw_reset(fpc1020);
+
+	 proc_entry = proc_create(PROC_NAME, 0777, NULL, &proc_file_fpc_ops);
+    	 if (NULL == proc_entry)
+             {
+                 printk(" gf3208 Couldn't create proc entry!");
+                 return -ENOMEM;
+             }
+             else
+             {
+                 printk("gf3208 Create proc entry success!");
+             }
+#endif
 
 
-
-
-
-	dev_err(dev, "%s: ok\n", __func__);
+	dev_info(dev, "%s: ok\n", __func__);
 	fpc1020->fb_black = false;
 	fpc1020->wait_finger_down = false;
+#ifndef CONFIG_MACH_XIAOMI_YSL
 	INIT_WORK(&fpc1020->work, notification_work);
+#endif
 	fpc1020->fb_notifier = fpc_notif_block;
 	fb_register_client(&fpc1020->fb_notifier);
 
@@ -710,7 +865,6 @@ exit:
 static int fpc1020_remove(struct platform_device *pdev)
 {
 	struct fpc1020_data *fpc1020 = platform_get_drvdata(pdev);
-
 	fb_unregister_client(&fpc1020->fb_notifier);
 	sysfs_remove_group(&pdev->dev.kobj, &attribute_group);
 	mutex_destroy(&fpc1020->lock);
@@ -718,6 +872,9 @@ static int fpc1020_remove(struct platform_device *pdev)
 	(void)vreg_setup(fpc1020, "vdd_ana", false);
 	(void)vreg_setup(fpc1020, "vdd_io", false);
 	(void)vreg_setup(fpc1020, "vcc_spi", false);
+#ifdef CONFIG_MACH_XIAOMI_YSL
+	remove_proc_entry(PROC_NAME, NULL);
+#endif
 	dev_info(&pdev->dev, "%s\n", __func__);
 
 	return 0;
@@ -764,3 +921,4 @@ MODULE_LICENSE("GPL v2");
 MODULE_AUTHOR("Aleksej Makarov");
 MODULE_AUTHOR("Henrik Tillman <henrik.tillman@fingerprints.com>");
 MODULE_DESCRIPTION("FPC1020 Fingerprint sensor device driver.");
+
