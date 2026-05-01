@@ -17,6 +17,12 @@
             regulator-always-on;
 		};
 	};
+
+	rpm-regulator-ldoa13 {
+		pm8953_l13: regulator-l13 {
+            regulator-always-on;
+		};
+	};
 	
 	rpm-regulator-ldoa23 {
 		pm8953_l23: regulator-l23 {
