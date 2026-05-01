@@ -29,6 +29,8 @@
 	/delete-property/ qcom,typec-psy-name;
 	qcom,thermal-mitigation = <3000 2500 2000 2000 1000 1000 0>;
 	qcom,battery-data = <&qrd_batterydata>;
+	io-channels = <&pmi8950_vadc VADC_VCHG_SNS_LEGACY>;
+	io-channel-names = "vchg_sns";
 	status = "okay";
 };
 
