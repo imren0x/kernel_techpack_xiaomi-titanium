@@ -27,6 +27,12 @@
 	};
 };
 
+&soc {
+	qcom,lpm-levels {
+		qcom,use-psci;
+	};
+};
+
 &thermal_zones {
 	case-therm-adc {
 		status = "disabled";
