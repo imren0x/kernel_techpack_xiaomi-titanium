@@ -3127,6 +3127,8 @@ static int fts_ts_probe_entry(struct fts_ts_data *ts_data)
 	}
 #endif
 
+	fts_irq_enable();
+
 #if IS_ENABLED(CONFIG_TOUCHSCREEN_SYSCTL_MI8953)
  	fts_mi8953_ts_ops.dev = ts_data->dev;
  	xiaomi_msm8953_touchscreen_register_operations(&fts_mi8953_ts_ops);
