@@ -29,7 +29,7 @@
 		status = "okay";
 		reg = <0x5d>;
 		interrupt-parent = <&tlmm>;
-		interrupts = <65 0x2008>
+		interrupts = <65 0x2008>;
 		vdd_ana-supply = <&pm8953_l10>;
 		vcc_i2c-supply = <&pm8953_l6>;
 		pinctrl-names = "gdix_ts_int_default", "gdix_ts_int_output_low",
