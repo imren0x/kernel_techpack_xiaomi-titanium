@@ -21,6 +21,7 @@
 		focaltech,max-touch-number = <10>;
 		focaltech,ignore-id-check;
 		focaltech,charger-detect;
+		focaltech,esd-check;
 	};
 
 	goodix@5d{
