@@ -117,6 +117,7 @@ chan@11 {
 };
 
 &usb3 {
+	qcom,iommu-dma = "disabled";
 	qcom,usbin-vadc = <&pmi8940_vadc>;
 	qcom,detect-dpdm-floating;
 	vbus_dwc3-supply = <&smbcharger_charger_otg>;
