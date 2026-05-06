@@ -78,8 +78,8 @@ chan@11 {
 			/delete-property/qcom,fastchg-current-comp;
 			qcom,cool-xiaomi-bat-decidegc = <50>;
 			qcom,battery-data = <&mtp_batterydata>;
-	    		qcom,chg-led-sw-controls;
-	   		qcom,chg-led-support;
+	    	/delete-property/ qcom,chg-led-sw-controls;
+			/delete-property/ qcom,chg-led-support;
 			io-channels = <&pmi8940_vadc VADC_VCHG_SNS_LEGACY>;
 			io-channel-names = "vchg_sns";
 		};
