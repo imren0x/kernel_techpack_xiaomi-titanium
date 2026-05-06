@@ -9,6 +9,12 @@
 	reg = <0x0 0x8e800000 0x0 0x700000>;
 };
 
+&soc {
+	restart@4ab000 {
+		qcom,force-warm-reboot;
+	};
+};
+
 &soc { 
 	/delete-node/ qseecom@85b00000;
 	qcom_seecom: qseecom@84A00000 {
