@@ -92,13 +92,13 @@
         };
 
 	eeprom1: qcom,eeprom@1 {
-                cell-index = <0>;
+                cell-index = <1>;
                 qcom,eeprom-name = "vince_imx486_ofilm";
                 compatible = "qcom,eeprom";
 				qcom,i2c-freq-mode = <1>;
                 qcom,slave-addr = <0xA0>;
                 qcom,cci-master = <0>;
-                reg = <0x0>;
+                reg = <0x1>;
                 qcom,num-blocks = <1>;
                 qcom,page0 = <0 0x0 2 0x01 1 1>;
                 qcom,poll0 = <0 0x0 2 0x0 1 0>;
