@@ -621,8 +621,8 @@
 		qcom,mdss-dsi-panel-status-read-length = <1>;
 		qcom,mdss-dsi-panel-status-value = <0x9C>;
 		qcom,mdss-dsi-panel-max-error-count = <3>;
-		qcom,mdss-pan-physical-width-dimension = <69>;
-		qcom,mdss-pan-physical-height-dimension = <122>;
+		qcom,mdss-pan-physical-width-dimension = <68>;
+		qcom,mdss-pan-physical-height-dimension = <136>;
 		qcom,ulps-enabled;
 	};
 };
