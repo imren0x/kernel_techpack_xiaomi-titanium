@@ -2,6 +2,7 @@
 #include "../common/spi.dtsi"
 #include "../common/pinctrl.dtsi"
 #include "display.dtsi"
+#include "touchscreen.dtsi"
 #include "camera.dtsi"
 #include "battery.dtsi"
 #include "audio.dtsi"
