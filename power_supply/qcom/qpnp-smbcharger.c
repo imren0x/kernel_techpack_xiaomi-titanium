@@ -443,7 +443,7 @@ module_param_named(
 	int, 00600
 );
 
-#if defined(CONFIG_MACH_XIAOMI_TIFFANY) || defined(CONFIG_MACH_XIAOMI_VINCE)
+#if defined(CONFIG_MACH_XIAOMI_TIFFANY) || defined(CONFIG_MACH_XIAOMI_VINCE) || defined(CONFIG_MACH_XIAOMI_TISSOT)
 static int smbchg_default_hvdcp_icl_ma = 2500;
 #else
 static int smbchg_default_hvdcp_icl_ma = 1800;
@@ -453,7 +453,7 @@ module_param_named(
 	int, 00600
 );
 
-#if defined(CONFIG_MACH_XIAOMI_TIFFANY) || defined(CONFIG_MACH_XIAOMI_VINCE)
+#if defined(CONFIG_MACH_XIAOMI_TIFFANY) || defined(CONFIG_MACH_XIAOMI_VINCE) || defined(CONFIG_MACH_XIAOMI_TISSOT)
 static int smbchg_default_hvdcp3_icl_ma = 2500;
 #else
 static int smbchg_default_hvdcp3_icl_ma = 3000;
