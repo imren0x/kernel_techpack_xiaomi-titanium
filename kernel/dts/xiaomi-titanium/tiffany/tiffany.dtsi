@@ -4,3 +4,4 @@
 #include "display.dtsi"
 #include "camera.dtsi"
 #include "battery.dtsi"
+#include "audio.dtsi"
