@@ -54,7 +54,6 @@ static struct synaptics_dsx_hw_interface hw_if;
 
 static struct platform_device *synaptics_dsx_i2c_device;
 
-active_tp_setup(synaptics);
 
 #ifdef CONFIG_OF
 static int parse_dt(struct device *dev, struct synaptics_dsx_board_data *bdata)
@@ -290,10 +289,16 @@ static int synaptics_rmi4_i2c_set_page(struct synaptics_rmi4_data *rmi4_data,
 {
 	int retval = 0;
 	unsigned char retry;
-	unsigned char buf[PAGE_SELECT_LEN];
+	unsigned char *buf = NULL;
 	unsigned char page;
 	struct i2c_client *i2c = to_i2c_client(rmi4_data->pdev->dev.parent);
 	struct i2c_msg msg[2];
+
+	buf = kcalloc(PAGE_SELECT_LEN, sizeof(char), GFP_KERNEL);
+	if (!buf) {
+		retval = -ENOMEM;
+		goto exit;
+	}
 
 	msg[0].addr = hw_if.board_data->i2c_addr;
 	msg[0].flags = 0;
@@ -325,6 +330,8 @@ static int synaptics_rmi4_i2c_set_page(struct synaptics_rmi4_data *rmi4_data,
 		retval = PAGE_SELECT_LEN;
 	}
 
+exit:
+	kfree(buf);
 	return retval;
 }
 
@@ -333,7 +340,7 @@ static int synaptics_rmi4_i2c_read(struct synaptics_rmi4_data *rmi4_data,
 {
 	int retval = 0;
 	unsigned char retry;
-	unsigned char buf;
+	unsigned char *buf = NULL;
 	unsigned char index = 0;
 	unsigned char xfer_msgs;
 	unsigned char remaining_msgs;
@@ -346,6 +353,12 @@ static int synaptics_rmi4_i2c_read(struct synaptics_rmi4_data *rmi4_data,
 
 	mutex_lock(&rmi4_data->rmi4_io_ctrl_mutex);
 
+	buf = kcalloc(1, sizeof(char), GFP_KERNEL);
+	if (!buf) {
+		retval = -ENOMEM;
+		goto exit;
+	}
+
 	retval = synaptics_rmi4_i2c_set_page(rmi4_data, addr);
 	if (retval != PAGE_SELECT_LEN) {
 		retval = -EIO;
@@ -355,13 +368,13 @@ static int synaptics_rmi4_i2c_read(struct synaptics_rmi4_data *rmi4_data,
 	msg[0].addr = hw_if.board_data->i2c_addr;
 	msg[0].flags = 0;
 	msg[0].len = 1;
-	msg[0].buf = &buf;
+	msg[0].buf = buf;
 	msg[rd_msgs].addr = hw_if.board_data->i2c_addr;
 	msg[rd_msgs].flags = I2C_M_RD;
 	msg[rd_msgs].len = (unsigned short)remaining_length;
 	msg[rd_msgs].buf = &data[data_offset];
 
-	buf = addr & MASK_8BIT;
+	buf[0] = addr & MASK_8BIT;
 
 	remaining_msgs = rd_msgs + 1;
 
@@ -400,8 +413,8 @@ static int synaptics_rmi4_i2c_read(struct synaptics_rmi4_data *rmi4_data,
 	retval = length;
 
 exit:
+	kfree(buf);
 	mutex_unlock(&rmi4_data->rmi4_io_ctrl_mutex);
-
 	return retval;
 }
 
@@ -468,10 +481,126 @@ exit:
 	return retval;
 }
 
+static int check_dt(struct device_node *np)
+{
+	int i;
+	int count;
+	struct device_node *node;
+	struct drm_panel *panel;
+
+	count = of_count_phandle_with_args(np, "panel", NULL);
+	if (count <= 0)
+		return 0;
+
+	for (i = 0; i < count; i++) {
+		node = of_parse_phandle(np, "panel", i);
+		panel = of_drm_find_panel(node);
+		of_node_put(node);
+		if (!IS_ERR(panel)) {
+			active_panel = panel;
+			return 0;
+		}
+	}
+
+	return -ENODEV;
+}
+
+static int check_default_tp(struct device_node *dt, const char *prop)
+{
+	const char *active_tp;
+	const char *compatible;
+	char *start;
+	int ret;
+
+	ret = of_property_read_string(dt->parent, prop, &active_tp);
+	if (ret) {
+		pr_err(" %s:fail to read %s %d\n", __func__, prop, ret);
+		return -ENODEV;
+	}
+
+	ret = of_property_read_string(dt, "compatible", &compatible);
+	if (ret < 0) {
+		pr_err(" %s:fail to read %s %d\n", __func__, "compatible", ret);
+		return -ENODEV;
+	}
+
+	start = strnstr(active_tp, compatible, strlen(active_tp));
+	if (start == NULL) {
+		pr_err(" %s:no match compatible, %s, %s\n",
+			__func__, compatible, active_tp);
+		ret = -ENODEV;
+	}
+
+	return ret;
+}
+
+#if defined(CONFIG_SECURE_TOUCH_SYNAPTICS_DSX)
+static int synaptics_rmi4_clk_prepare_enable(
+		struct synaptics_rmi4_data *rmi4_data)
+{
+	int ret;
+
+	ret = clk_prepare_enable(rmi4_data->iface_clk);
+	if (ret) {
+		dev_err(rmi4_data->pdev->dev.parent,
+				"error on clk_prepare_enable(iface_clk):%d\n",
+				ret);
+		return ret;
+	}
+	ret = clk_prepare_enable(rmi4_data->core_clk);
+	if (ret) {
+		clk_disable_unprepare(rmi4_data->iface_clk);
+		dev_err(rmi4_data->pdev->dev.parent,
+				"error clk_prepare_enable(core_clk):%d\n", ret);
+	}
+	return ret;
+}
+
+static void synaptics_rmi4_clk_disable_unprepare(
+		struct synaptics_rmi4_data *rmi4_data)
+{
+	clk_disable_unprepare(rmi4_data->core_clk);
+	clk_disable_unprepare(rmi4_data->iface_clk);
+}
+
+static int synaptics_rmi4_i2c_get(struct synaptics_rmi4_data *rmi4_data)
+{
+	int retval;
+	struct i2c_client *i2c = to_i2c_client(rmi4_data->pdev->dev.parent);
+
+	mutex_lock(&rmi4_data->rmi4_io_ctrl_mutex);
+	retval = pm_runtime_get_sync(i2c->adapter->dev.parent);
+	if (retval >= 0 && rmi4_data->core_clk != NULL &&
+			rmi4_data->iface_clk != NULL) {
+		retval = synaptics_rmi4_clk_prepare_enable(rmi4_data);
+		if (retval)
+			pm_runtime_put_sync(i2c->adapter->dev.parent);
+	}
+	mutex_unlock(&rmi4_data->rmi4_io_ctrl_mutex);
+
+	return retval;
+}
+
+static void synaptics_rmi4_i2c_put(struct synaptics_rmi4_data *rmi4_data)
+{
+	struct i2c_client *i2c = to_i2c_client(rmi4_data->pdev->dev.parent);
+
+	mutex_lock(&rmi4_data->rmi4_io_ctrl_mutex);
+	if (rmi4_data->core_clk != NULL && rmi4_data->iface_clk != NULL)
+		synaptics_rmi4_clk_disable_unprepare(rmi4_data);
+	pm_runtime_put_sync(i2c->adapter->dev.parent);
+	mutex_unlock(&rmi4_data->rmi4_io_ctrl_mutex);
+}
+#endif
+
 static struct synaptics_dsx_bus_access bus_access = {
 	.type = BUS_I2C,
 	.read = synaptics_rmi4_i2c_read,
 	.write = synaptics_rmi4_i2c_write,
+#if defined(CONFIG_SECURE_TOUCH_SYNAPTICS_DSX)
+	.get = synaptics_rmi4_i2c_get,
+	.put = synaptics_rmi4_i2c_put,
+#endif
 };
 
 static void synaptics_rmi4_i2c_dev_release(struct device *dev)
@@ -483,11 +612,17 @@ static int synaptics_rmi4_i2c_probe(struct i2c_client *client,
 		const struct i2c_device_id *dev_id)
 {
 	int retval;
-	struct device_node *dt = client->dev.of_node;
+	struct device_node *dp = client->dev.of_node;
 
-	if (synaptics_check_assigned_tp(dt, "compatible",
-		"qcom,i2c-touch-active") < 0)
-		goto err_dt_not_match;
+	if (check_dt(dp)) {
+		if (!check_default_tp(dp, "qcom,i2c-touch-active"))
+			retval = -EPROBE_DEFER;
+		else
+			retval = -ENODEV;
+
+		return retval;
+	}
+
 	if (!i2c_check_functionality(client->adapter,
 			I2C_FUNC_SMBUS_BYTE_DATA)) {
 		dev_err(&client->dev,
@@ -594,8 +729,6 @@ static int synaptics_rmi4_i2c_probe(struct i2c_client *client,
 	}
 
 	return 0;
-err_dt_not_match:
-	return -ENODEV;
 }
 
 static int synaptics_rmi4_i2c_remove(struct i2c_client *client)
