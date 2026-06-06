@@ -60,6 +60,15 @@
 	};
 
 	qcom,pmi8950@3 {
+        labibb: qpnp-labibb-regulator {
+			status = "ok";
+			ibb_regulator: qcom,ibb@dc00 {
+				qcom,qpnp-ibb-init-lcd-voltage = <5700000>;
+			};
+			lab_regulator: qcom,lab@de00 {
+				qcom,qpnp-lab-init-lcd-voltage = <5700000>;
+			};
+		};
 		wled: qcom,leds@d800 {
 			qcom,en-cabc;
 		};
