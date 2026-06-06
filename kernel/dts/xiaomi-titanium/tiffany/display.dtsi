@@ -1,0 +1,3 @@
+#include "../common/panel/dsi-panel-ft8716-fhd-video.dtsi"
+#include "../common/panel/dsi-panel-ili7807-fhd-video.dtsi"
+#include "panel/dsi-panel-otm1911-fhd-video.dtsi"
