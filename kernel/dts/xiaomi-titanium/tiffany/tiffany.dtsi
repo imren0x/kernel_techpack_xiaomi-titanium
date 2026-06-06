@@ -1,1 +1,4 @@
+#include "../common/sdhc.dtsi"
+#include "../common/spi.dtsi"
+#include "../common/pinctrl.dtsi"
 #include "battery.dtsi"
