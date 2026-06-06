@@ -3,7 +3,6 @@
 #include "soc.dtsi"
 #include "cpu.dtsi"
 #include "audio.dtsi"
-#include "haptic.dtsi"
 #include "display.dtsi"
 #include "regulator.dtsi"
 #include "leds.dtsi"
