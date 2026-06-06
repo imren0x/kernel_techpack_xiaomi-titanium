@@ -6094,7 +6094,17 @@ static irqreturn_t batt_warm_handler(int irq, void *_chip)
 {
 	struct smbchg_chip *chip = _chip;
 	u8 reg = 0;
+#if (defined CONFIG_MACH_XIAOMI_TIFFANY) || (defined CONFIG_MACH_XIAOMI_TISSOT)
+	int rc;
+	/* set the warm float voltage compensation,set the warm float voltage to 4.1V */
+	if (chip->float_voltage_comp != -EINVAL) {
+		rc = smbchg_float_voltage_comp_set(chip, chip->float_voltage_comp);
+	if (rc < 0)
+		dev_err(chip->dev, "Couldn't set float voltage comp rc = %d\n", rc);
+	pr_smb(PR_STATUS, "set float voltage comp to %d\n", chip->float_voltage_comp);
 
+	}
+#endif
 	smbchg_read(chip, &reg, chip->bat_if_base + RT_STS, 1);
 	chip->batt_warm = !!(reg & HOT_BAT_SOFT_BIT);
 	pr_smb(PR_INTERRUPT, "triggered: 0x%02x\n", reg);
@@ -6110,6 +6120,14 @@ static irqreturn_t batt_cool_handler(int irq, void *_chip)
 {
 	struct smbchg_chip *chip = _chip;
 	u8 reg = 0;
+
+#if (defined CONFIG_MACH_XIAOMI_TIFFANY) || (defined CONFIG_MACH_XIAOMI_TISSOT)
+	int rc;
+	/* set the cool float voltage compensation ,set the cool float voltage to 4.4V*/
+	rc = smbchg_float_voltage_comp_set(chip, 0);
+	if (rc < 0)
+		dev_err(chip->dev, "Couldn't set float voltage comp rc = %d\n", rc);
+#endif
 
 	smbchg_read(chip, &reg, chip->bat_if_base + RT_STS, 1);
 	chip->batt_cool = !!(reg & COLD_BAT_SOFT_BIT);
@@ -8082,7 +8100,7 @@ static int smbchg_probe(struct platform_device *pdev)
 		dev_err(chip->dev, "Error parsing DT peripherals: %d\n", rc);
 		goto votables_cleanup;
 	}
-#if (defined CONFIG_MACH_XIAOMI_SAKURA) || (defined CONFIG_MACH_XIAOMI_DAISY)
+#if (defined CONFIG_MACH_XIAOMI_SAKURA) || (defined CONFIG_MACH_XIAOMI_DAISY) || (defined CONFIG_MACH_XIAOMI_TIFFANY) || (defined CONFIG_MACH_XIAOMI_TISSOT)
 	chip->hvdcp_not_supported = true;
 #endif
 	rc = smbchg_check_chg_version(chip);
