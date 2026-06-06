@@ -5,6 +5,7 @@
 			focaltech,ic-type = <>; // Unknown
 			focaltech,key-y-coords = <2040 2040 2040>;
 			reg = <0x38>;
+            focaltech,alternate-i2c-addr = <0x40>;
 			interrupt-parent = <&tlmm>;
 			interrupts = <65 0x2008>;
 			vdd-supply = <&pm8953_l10>;
