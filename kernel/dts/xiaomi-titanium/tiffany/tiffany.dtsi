@@ -3,7 +3,3 @@
 #include "../common/pinctrl.dtsi"
 #include "display.dtsi"
 #include "battery.dtsi"
-
-&mdss_dsi0 {
-	qcom,dsi-pref-prim-pan = <&dsi_otm1911_fhd_vid>;
-};
