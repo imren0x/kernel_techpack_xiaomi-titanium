@@ -1,0 +1,9 @@
+/ {
+	qrd_batterydata: qcom,battery-data {
+		qcom,batt-id-range-pct = <20>;
+		/delete-node/ qcom,qrd_msm8937_sku1_2920mah;
+		#include "../common/batterydata/batterydata-qrd-coslight-3000mAh.dtsi"
+		#include "../common/batterydata/batterydata-qrd-scud-3000mAh.dtsi"
+		#include "../common/batterydata/batterydata-qrd-sunwoda-liwei-3000mAh.dtsi"
+	};
+};
