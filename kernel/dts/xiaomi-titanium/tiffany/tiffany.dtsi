@@ -5,4 +5,5 @@
 #include "camera.dtsi"
 #include "battery.dtsi"
 #include "audio.dtsi"
+#include "misc.dtsi"
 #include "fingerprint.dtsi"
