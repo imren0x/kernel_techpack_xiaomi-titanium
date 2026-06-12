@@ -1,0 +1,1 @@
+obj-$(CONFIG_MACH_XIAOMI_TITANIUM) += mach_detect.o

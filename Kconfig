@@ -1,3 +1,9 @@
+config MACH_XIAOMI_TITANIUM
+	bool "Support for Xiaomi MSM8953 platform"
+	help
+	  Say Y here to enable support for Xiaomi MSM8953 platform.
+
+source "techpack/xiaomi-titanium/mach/Kconfig"
 source "techpack/xiaomi-titanium/pmic/Kconfig"
 source "techpack/xiaomi-titanium/power_supply/Kconfig"
 source "techpack/xiaomi-titanium/touchscreen/Kconfig"

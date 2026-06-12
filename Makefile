@@ -1,4 +1,5 @@
 ifeq ($(CONFIG_MACH_XIAOMI_TITANIUM),y)
+obj-$(CONFIG_MACH_XIAOMI_TITANIUM) += mach/
 obj-y += pmic/
 obj-y += power_supply/
 obj-y += vibrator/
