@@ -1,6 +1,5 @@
 #include "../common/sdhc.dtsi"
 #include "../common/spi.dtsi"
-#include "../common/haptic.dtsi"
 #include "display.dtsi"
 #include "touchscreen.dtsi"
 #include "misc.dtsi"
