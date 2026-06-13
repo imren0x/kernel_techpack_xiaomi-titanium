@@ -30,13 +30,6 @@
 	};
 };
 
-/* msm8953-audio */
-&int_codec {
-	/delete-property/msm-vdd-wsa-switch-supply;
-	/delete-property/qcom,msm-vdd-wsa-switch-voltage;
-	/delete-property/qcom,msm-vdd-wsa-switch-current;
-};
-
 &ext_codec {
 	status = "disabled";
 };
