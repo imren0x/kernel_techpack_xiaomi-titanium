@@ -69,9 +69,9 @@
 		pinctrl-names = "cam_default", "cam_suspend";
 		pinctrl-0 = <&cam_sensor_mclk0_default
 				&cam_sensor_rear_default
-				&cam_sensor_rear_vana>;
+				&cam_sensor_rear_vana_ysl>;
 		pinctrl-1 = <&cam_sensor_mclk0_sleep &cam_sensor_rear_sleep
-				&cam_sensor_rear_vana_sleep>;
+				&cam_sensor_rear_vana_sleep_ysl>;
 		gpios = <&tlmm 26 0>,
 			<&tlmm 40 0>,
 			<&tlmm 23 0>;
@@ -409,9 +409,9 @@
 		pinctrl-names = "cam_default", "cam_suspend";
 		pinctrl-0 = <&cam_sensor_mclk0_default
 			&cam_sensor_rear_default
-			&cam_sensor_rear_vana>;
+			&cam_sensor_rear_vana_ysl>;
 		pinctrl-1 = <&cam_sensor_mclk0_sleep &cam_sensor_rear_sleep
-			&cam_sensor_rear_vana_sleep>;
+			&cam_sensor_rear_vana_sleep_ysl>;
 		gpios = <&tlmm 26 0>,
 			<&tlmm 40 0>,
 			<&tlmm 23 0>;
@@ -625,9 +625,9 @@
 		pinctrl-names = "cam_default", "cam_suspend";
 		pinctrl-0 = <&cam_sensor_mclk0_default
 				&cam_sensor_rear_default
-				&cam_sensor_rear_vana>;
+				&cam_sensor_rear_vana_ysl>;
 		pinctrl-1 = <&cam_sensor_mclk0_sleep &cam_sensor_rear_sleep
-				&cam_sensor_rear_vana_sleep>;
+				&cam_sensor_rear_vana_sleep_ysl>;
 		gpios = <&tlmm 26 0>,
 			<&tlmm 40 0>,
 			<&tlmm 23 0>;
