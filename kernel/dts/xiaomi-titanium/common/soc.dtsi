@@ -1,4 +1,33 @@
 /* msm8953.dtsi */
+/{
+	cpus {
+        CPU0: cpu@0 {
+    			clock-frequency = <2016000000>;
+  		};
+        CPU1: cpu@1 {
+    			clock-frequency = <2016000000>;
+  		};
+        CPU2: cpu@2 {
+    			clock-frequency = <2016000000>;
+  		};
+        CPU3: cpu@3 {
+    			clock-frequency = <2016000000>;
+  		};
+  		CPU4: cpu@100 {
+    			clock-frequency = <2016000000>;
+  		};
+  		CPU5: cpu@101 {
+    			clock-frequency = <2016000000>;
+  		};
+  		CPU6: cpu@102 {
+    			clock-frequency = <2016000000>;
+  		};
+  		CPU7: cpu@103 {
+    			clock-frequency = <2016000000>;
+  		};
+	};
+};
+
 &other_ext_mem {
 	reg = <0x0 0x84A00000 0x0 0x1E00000>;
 };
@@ -7,6 +36,44 @@
 };
 &wcnss_fw_mem {
 	reg = <0x0 0x8e800000 0x0 0x700000>;
+};
+
+&i2c_1 {
+	qcom,disable-dma;
+};
+
+&i2c_2 {
+	qcom,disable-dma;
+};
+
+&i2c_3 {
+	qcom,disable-dma;
+};
+
+&i2c_5 {
+	qcom,disable-dma;
+};
+
+/* msm8953-pm.dtsi */
+&soc {
+	qcom,lpm-levels {
+		qcom,use-psci;
+	};
+};
+
+/* msm8953-thermal.dtsi */
+&thermal_zones {
+	case-therm-adc {
+		status = "disabled";
+	};
+
+	case-therm-step {
+		status = "disabled";
+	};
+
+	quiet-therm-step {
+		status = "disabled";
+	};
 };
 
 &soc {

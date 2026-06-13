@@ -1,7 +1,6 @@
 #include "android.dtsi"
 #include "ramoops.dtsi"
 #include "soc.dtsi"
-#include "cpu.dtsi"
 #include "misc.dtsi"
 #include "audio.dtsi"
 #include "display.dtsi"
