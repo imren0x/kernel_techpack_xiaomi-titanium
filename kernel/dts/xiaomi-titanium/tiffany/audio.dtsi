@@ -1,22 +1,4 @@
 &soc {
-
-	int_codec: sound {
-		status = "ok";
-		qcom,msm-hs-micbias-type = "internal";
-		qcom,audio-routing =
-			"RX_BIAS", "MCLK",
-			"SPK_RX_BIAS", "MCLK",
-			"INT_LDO_H", "MCLK",
-			"MIC BIAS External", "Handset Mic",
-			"MIC BIAS Internal2", "Headset Mic",
-			"MIC BIAS External", "Secondary Mic",
-			"AMIC1", "MIC BIAS External",
-			"AMIC2", "MIC BIAS Internal2",
-			"AMIC3", "MIC BIAS External";
-		/delete-property/ qcom,hdmi-dba-codec-rx;
-
-	};
-
 	i2c@78b6000 {
 		spkamp@3a {/* max98927 smartpa device*/
 			compatible = "maxim,max98927L";
@@ -32,20 +14,19 @@
 		};
 	};
 	
-	        cdc_ext_pa_gpios: cdc_ext_pa_pinctrl {
-                compatible = "qcom,msm-cdc-pinctrl";
-                pinctrl-names = "aud_active", "aud_sleep";
-                pinctrl-0 = <&ext_pa_power_on>;
-                pinctrl-1 = <&ext_pa_power_off>;
-        };
-		
+	cdc_ext_pa_gpios: cdc_ext_pa_pinctrl {
+        compatible = "qcom,msm-cdc-pinctrl";
+        pinctrl-names = "aud_active", "aud_sleep";
+        pinctrl-0 = <&ext_pa_power_on>;
+        pinctrl-1 = <&ext_pa_power_off>;
+    };		
 };
 
 &int_codec {
+	qcom,msm-hs-micbias-type = "internal";
+
 	qcom,msm-spk-ext-pa = <&tlmm 141 0>;
 	qcom,cdc-ext-pa-gpios = <&cdc_ext_pa_gpios>;
-	qcom,msm-mbhc-hphl-swh = <1>;
-	qcom,msm-mbhc-gnd-swh = <1>;
 
 	qcom,msm-gpios =
 		"pri_i2s",
@@ -139,36 +120,4 @@
 		&pri_tlmm_lines_act &pri_tlmm_ws_act>;
 
 	/delete-property/ qcom,cdc-us-euro-gpios;
-};
-
-&int_codec {
-	status = "ok";
-};
-
-&ext_codec {
-	status = "disable";
-};
-
-&slim_msm {
-	status = "disable";
-};
-
-&dai_slim {
-	status = "disable";
-};
-
-&wcd9xxx_intc {
-	status = "disable";
-};
-
-&clock_audio {
-	status = "disable";
-};
-
-&wcd9335 {
-	status = "disable";
-};
-
-&wcd_rst_gpio {
-	status = "disable";
 };
