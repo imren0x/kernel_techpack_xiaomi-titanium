@@ -1,1 +1,10 @@
+/ {
+        firmware: firmware {
+                android {
+			/delete-node/ fstab;
+                        /delete-node/ vbmeta;
+                };
+        };
+};
+
 #include "daikura.dtsi"
