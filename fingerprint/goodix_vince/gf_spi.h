@@ -152,16 +152,16 @@ struct gf_dev {
 
 };
 
-int gf_parse_dts(struct gf_dev *gf_dev);
-void gf_cleanup(struct gf_dev *gf_dev);
+int vince_gf_parse_dts(struct gf_dev *gf_dev);
+void vince_gf_cleanup(struct gf_dev *gf_dev);
 
-int gf_power_on(struct gf_dev *gf_dev);
-int gf_power_off(struct gf_dev *gf_dev);
+int vince_gf_power_on(struct gf_dev *gf_dev);
+int vince_gf_power_off(struct gf_dev *gf_dev);
 
-int gf_hw_reset(struct gf_dev *gf_dev, unsigned int delay_ms);
-int gf_irq_num(struct gf_dev *gf_dev);
+int vince_gf_hw_reset(struct gf_dev *gf_dev, unsigned int delay_ms);
+int vince_gf_irq_num(struct gf_dev *gf_dev);
 
-void sendnlmsg(char *message);
-int netlink_init(void);
-void netlink_exit(void);
+void vince_sendnlmsg(char *message);
+int vince_netlink_init(void);
+void vince_netlink_exit(void);
 #endif /*__GF_SPI_H*/

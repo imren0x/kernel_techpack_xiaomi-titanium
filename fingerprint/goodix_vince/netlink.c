@@ -9,7 +9,7 @@
 #define NETLINK_TEST 25
 #define MAX_MSGSIZE 32
 int stringlength(char *s);
-void sendnlmsg(char *message);
+void vince_sendnlmsg(char *message);
 int pid;
 int err;
 struct sock *nl_sk = NULL;
@@ -24,7 +24,7 @@ struct gf_uk_channel{
 };
 
 
-void sendnlmsg(char *message)
+void vince_sendnlmsg(char *message)
 {
 	struct sk_buff *skb_1;
 	struct nlmsghdr *nlh;
@@ -74,7 +74,7 @@ void nl_data_ready(struct sk_buff *__skb)
 
 }
 
-int netlink_init(void)
+int vince_netlink_init(void)
 {
 	struct netlink_kernel_cfg netlink_cfg;
 	memset(&netlink_cfg, 0, sizeof(struct netlink_kernel_cfg));
@@ -96,7 +96,7 @@ int netlink_init(void)
 	return 0;
 }
 
-void netlink_exit(void)
+void vince_netlink_exit(void)
 {
 	if (nl_sk != NULL) {
 		netlink_kernel_release(nl_sk);

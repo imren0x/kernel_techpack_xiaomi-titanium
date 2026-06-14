@@ -216,7 +216,7 @@ static DEVICE_ATTR(fingerdown_wait, S_IWUSR, NULL, fingerdown_wait_set);
  * @see pctl_names
  * @see fpc1020_probe
  */
-static int select_pin_ctl(struct fpc1020_data *fpc1020, const char *name)
+static int ysl_select_pin_ctl(struct fpc1020_data *fpc1020, const char *name)
 {
 	size_t i;
 	int rc;
@@ -250,7 +250,7 @@ static ssize_t pinctl_set(struct device *dev,
 	int rc;
 
 	mutex_lock(&fpc1020->lock);
-	rc = select_pin_ctl(fpc1020, buf);
+	rc = ysl_select_pin_ctl(fpc1020, buf);
 	mutex_unlock(&fpc1020->lock);
 
 	return rc ? rc : count;
@@ -283,7 +283,7 @@ static ssize_t regulator_enable_set(struct device *dev,
 }
 static DEVICE_ATTR(regulator_enable, S_IWUSR, NULL, regulator_enable_set);
 
-static int hw_reset(struct fpc1020_data *fpc1020)
+static int ysl_hw_reset(struct fpc1020_data *fpc1020)
 {
 	int irq_gpio;
 	struct device *dev = fpc1020->dev;
@@ -318,7 +318,7 @@ static ssize_t hw_reset_set(struct device *dev,
 
 	if (!strncmp(buf, "reset", strlen("reset"))) {
 		mutex_lock(&fpc1020->lock);
-		rc = hw_reset(fpc1020);
+		rc = ysl_hw_reset(fpc1020);
 		mutex_unlock(&fpc1020->lock);
 	} else {
 		return -EINVAL;
@@ -340,14 +340,14 @@ static DEVICE_ATTR(hw_reset, S_IWUSR, NULL, hw_reset_set);
  * @note This function will not send any commands to the sensor it will only
  *       control it "electrically".
  */
-static int device_prepare(struct fpc1020_data *fpc1020, bool enable)
+static int ysl_device_prepare(struct fpc1020_data *fpc1020, bool enable)
 {
 	int rc;
 
 	mutex_lock(&fpc1020->lock);
 	if (enable && !fpc1020->prepared) {
 		fpc1020->prepared = true;
-		select_pin_ctl(fpc1020, "fpc1020_reset_reset");
+		ysl_select_pin_ctl(fpc1020, "fpc1020_reset_reset");
 
 		rc = vreg_setup(fpc1020, "vcc_spi", true);
 		if (rc)
@@ -369,10 +369,10 @@ static int device_prepare(struct fpc1020_data *fpc1020, bool enable)
 		 * on the sensor after power up to be sure that the sensor is
 		 * in a good state after power up. Okeyed by ASIC. */
 
-		(void)select_pin_ctl(fpc1020, "fpc1020_reset_active");
+		(void)ysl_select_pin_ctl(fpc1020, "fpc1020_reset_active");
 	} else if (!enable && fpc1020->prepared) {
 		rc = 0;
-		(void)select_pin_ctl(fpc1020, "fpc1020_reset_reset");
+		(void)ysl_select_pin_ctl(fpc1020, "fpc1020_reset_reset");
 
 		usleep_range(PWR_ON_SLEEP_MIN_US, PWR_ON_SLEEP_MAX_US);
 
@@ -403,9 +403,9 @@ static ssize_t device_prepare_set(struct device *dev,
 	struct fpc1020_data *fpc1020 = dev_get_drvdata(dev);
 
 	if (!strncmp(buf, "enable", strlen("enable")))
-		rc = device_prepare(fpc1020, true);
+		rc = ysl_device_prepare(fpc1020, true);
 	else if (!strncmp(buf, "disable", strlen("disable")))
-		rc = device_prepare(fpc1020, false);
+		rc = ysl_device_prepare(fpc1020, false);
 	else
 		return -EINVAL;
 
@@ -501,7 +501,7 @@ static irqreturn_t fpc1020_irq_handler(int irq, void *handle)
 	return IRQ_HANDLED;
 }
 
-static int fpc1020_request_named_gpio(struct fpc1020_data *fpc1020,
+static int fpc1020_ysl_ysl_request_named_gpio(struct fpc1020_data *fpc1020,
 	const char *label, int *gpio)
 {
 	struct device *dev = fpc1020->dev;
@@ -582,7 +582,7 @@ static const struct file_operations proc_file_fpc_ops = {
 	.release = single_release,
 };
 
-static int fpc1020_probe(struct platform_device *pdev)
+static int fpc1020_ysl_probe(struct platform_device *pdev)
 {
 	struct device *dev = &pdev->dev;
 	int rc = 0;
@@ -614,11 +614,11 @@ static int fpc1020_probe(struct platform_device *pdev)
 		goto exit;
 	}
 
-	rc = fpc1020_request_named_gpio(fpc1020, "fpc,gpio_irq",
+	rc = fpc1020_ysl_request_named_gpio(fpc1020, "fpc,gpio_irq",
 			&fpc1020->irq_gpio);
 	if (rc)
 		goto exit;
-	rc = fpc1020_request_named_gpio(fpc1020, "fpc,gpio_rst",
+	rc = fpc1020_ysl_request_named_gpio(fpc1020, "fpc,gpio_rst",
 			&fpc1020->rst_gpio);
 	if (rc)
 		goto exit;
@@ -649,10 +649,10 @@ static int fpc1020_probe(struct platform_device *pdev)
 		fpc1020->pinctrl_state[i] = state;
 	}
 
-	rc = select_pin_ctl(fpc1020, "fpc1020_reset_reset");
+	rc = ysl_select_pin_ctl(fpc1020, "fpc1020_reset_reset");
 	if (rc)
 		goto exit;
-	rc = select_pin_ctl(fpc1020, "fpc1020_irq_active");
+	rc = ysl_select_pin_ctl(fpc1020, "fpc1020_irq_active");
 	if (rc)
 		goto exit;
 
@@ -689,10 +689,10 @@ static int fpc1020_probe(struct platform_device *pdev)
 
 	if (of_property_read_bool(dev->of_node, "fpc,enable-on-boot")) {
 		dev_info(dev, "Enabling hardware\n");
-		(void)device_prepare(fpc1020, true);
+		(void)ysl_device_prepare(fpc1020, true);
 	}
 
-	rc = hw_reset(fpc1020);
+	rc = ysl_hw_reset(fpc1020);
 
 	 proc_entry = proc_create(PROC_NAME, 0777, NULL, &proc_file_fpc_ops);
     	 if (NULL == proc_entry)
@@ -716,7 +716,7 @@ exit:
 	return rc;
 }
 
-static int fpc1020_remove(struct platform_device *pdev)
+static int fpc1020_ysl_remove(struct platform_device *pdev)
 {
 	struct fpc1020_data *fpc1020 = platform_get_drvdata(pdev);
 	fb_unregister_client(&fpc1020->fb_notifier);
@@ -738,19 +738,19 @@ static struct of_device_id fpc1020_of_match[] = {
 };
 MODULE_DEVICE_TABLE(of, fpc1020_of_match);
 
-static struct platform_driver fpc1020_driver = {
+static struct platform_driver fpc1020_ysl_driver = {
 	.driver = {
 		.name	= "fpc1020",
 		.owner	= THIS_MODULE,
 		.of_match_table = fpc1020_of_match,
 	},
-	.probe	= fpc1020_probe,
-	.remove	= fpc1020_remove,
+	.probe	= fpc1020_ysl_probe,
+	.remove	= fpc1020_ysl_remove,
 };
 
-static int __init fpc1020_init(void)
+static int __init fpc1020_ysl_init(void)
 {
-	int rc = platform_driver_register(&fpc1020_driver);
+	int rc = platform_driver_register(&fpc1020_ysl_driver);
 
 	if (!rc)
 		pr_info("%s OK\n", __func__);
@@ -760,14 +760,14 @@ static int __init fpc1020_init(void)
 	return rc;
 }
 
-static void __exit fpc1020_exit(void)
+static void __exit fpc1020_ysl_exit(void)
 {
 	pr_info("%s\n", __func__);
-	platform_driver_unregister(&fpc1020_driver);
+	platform_driver_unregister(&fpc1020_ysl_driver);
 }
 
-module_init(fpc1020_init);
-module_exit(fpc1020_exit);
+module_init(fpc1020_ysl_init);
+module_exit(fpc1020_ysl_exit);
 
 MODULE_LICENSE("GPL v2");
 MODULE_AUTHOR("Aleksej Makarov");

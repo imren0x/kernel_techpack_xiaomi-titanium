@@ -19,7 +19,7 @@
 static int pid = -1;
 static struct sock *nl_sk;
 
-int sendnlmsg(char *msg)
+int ysl_sendnlmsg(char *msg)
 {
 	struct sk_buff *skb;
 	struct nlmsghdr *nlh;
@@ -71,7 +71,7 @@ static void nl_data_ready(struct sk_buff *__skb)
 }
 
 
-int netlink_init(void)
+int ysl_netlink_init(void)
 {
 	struct netlink_kernel_cfg netlink_cfg;
 
@@ -93,7 +93,7 @@ int netlink_init(void)
 	return 0;
 }
 
-void netlink_exit(void)
+void ysl_netlink_exit(void)
 {
 	if (nl_sk != NULL) {
 		netlink_kernel_release(nl_sk);

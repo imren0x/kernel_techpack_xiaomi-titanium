@@ -20,7 +20,7 @@
 		} while (0)
 
 
-static int gf3208_request_named_gpio(struct gf_dev *gf_dev, const char *label, int *gpio)
+static int vince_gf3208_request_named_gpio(struct gf_dev *gf_dev, const char *label, int *gpio)
 {
 	struct device *dev = &gf_dev->spi->dev;
 	struct device_node *np = dev->of_node;
@@ -40,7 +40,7 @@ static int gf3208_request_named_gpio(struct gf_dev *gf_dev, const char *label, i
 }
 
 #ifdef ENABLE_PINCTRL
-static int select_pin_ctl(struct gf_dev *gf_dev, const char *name)
+static int vince_select_pin_ctl(struct gf_dev *gf_dev, const char *name)
 {
 	size_t i;
 	int rc;
@@ -67,7 +67,7 @@ exit:
 
 
 /*GPIO pins reference.*/
-int gf_parse_dts(struct gf_dev *gf_dev)
+int vince_gf_parse_dts(struct gf_dev *gf_dev)
 {
 	int rc = 0;
 #ifdef ENABLE_PINCTRL
@@ -121,7 +121,7 @@ exit:
 
 }
 
-void gf_cleanup(struct gf_dev *gf_dev)
+void vince_gf_cleanup(struct gf_dev *gf_dev)
 {
 	gf_dbg("[info]  enter%s\n", __func__);
 
@@ -148,7 +148,7 @@ void gf_cleanup(struct gf_dev *gf_dev)
 }
 
 /*power management*/
-int gf_power_on(struct gf_dev *gf_dev)
+int vince_gf_power_on(struct gf_dev *gf_dev)
 {
 	int rc = 0;
 	msleep(10);
@@ -157,7 +157,7 @@ int gf_power_on(struct gf_dev *gf_dev)
 	return rc;
 }
 
-int gf_power_off(struct gf_dev *gf_dev)
+int vince_gf_power_off(struct gf_dev *gf_dev)
 {
 	int rc = 0;
 	pr_info("---- power off ----\n");
@@ -195,7 +195,7 @@ exit:
  *CPU output low level in RST pin to reset GF. This is the MUST action for GF.
  *Take care of this function. IO Pin driver strength / glitch and so on.
  ********************************************************************/
-int gf_hw_reset(struct gf_dev *gf_dev, unsigned int delay_ms)
+int vince_gf_hw_reset(struct gf_dev *gf_dev, unsigned int delay_ms)
 {
 	if (gf_dev == NULL) {
 		pr_info("Input buff is NULL.\n");
@@ -206,7 +206,7 @@ int gf_hw_reset(struct gf_dev *gf_dev, unsigned int delay_ms)
 	return 0;
 }
 
-int gf_irq_num(struct gf_dev *gf_dev)
+int vince_gf_irq_num(struct gf_dev *gf_dev)
 {
 	if (gf_dev == NULL) {
 		pr_info("Input buff is NULL.\n");

@@ -57,13 +57,13 @@
 #define WAKELOCK_HOLD_TIME 2000 /* in ms */
 #define FP_UNLOCK_REJECTION_TIMEOUT (WAKELOCK_HOLD_TIME - 500)
 
-#define GF_SPIDEV_NAME     "goodix,fingerprint"
+#define GF_SPIDEV_NAME     "goodix,fingerprint-vince"
 /*device name after register in charater*/
-#define GF_DEV_NAME            "goodix_fp"
-#define	GF_INPUT_NAME	   "gf3208"	/*"goodix_fp" */
+#define GF_DEV_NAME            "goodix_fp_vince"
+#define	GF_INPUT_NAME	   "gf3208_vince"	/*"goodix_fp_vince" */
 
-#define	CHRD_DRIVER_NAME	"goodix_fp_spi"
-#define	CLASS_NAME		   "goodix_fp"
+#define	CHRD_DRIVER_NAME	"goodix_fp_spi_vince"
+#define	CLASS_NAME		   "goodix_fp_vince"
 #define SPIDEV_MAJOR		225	/* assigned */
 #define N_SPI_MINORS		32	/* ... up to 256 */
 
@@ -312,7 +312,7 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		break;
 	case GF_IOC_RESET:
 		pr_info("%s GF_IOC_RESET. \n", __func__);
-		gf_hw_reset(gf_dev, 3);
+		vince_gf_hw_reset(gf_dev, 3);
 		break;
 	case GF_IOC_ENABLE_GPIO:
 		pr_info("%s GF_IOC_ENABLE_GPIO. \n", __func__);
@@ -322,7 +322,7 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		pr_info("%s GF_IOC_RELEASE_GPIO. \n", __func__);
 		gf_disable_irq(gf_dev);
 		devm_free_irq(&gf_dev->spi->dev, gf_dev->irq, gf_dev);
-		gf_cleanup(gf_dev);
+		vince_gf_cleanup(gf_dev);
 		break;
 	case GF_IOC_INPUT_KEY_EVENT:
 		pr_info("%s GF_IOC_INPUT_KEY_EVENT. \n", __func__);
@@ -409,7 +409,7 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		if (gf_dev->device_available == 1)
 			pr_info("Sensor has already powered-on.\n");
 		else
-			gf_power_on(gf_dev);
+			vince_gf_power_on(gf_dev);
 		gf_dev->device_available = 1;
 		break;
 	case GF_IOC_DISABLE_POWER:
@@ -417,7 +417,7 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		if (gf_dev->device_available == 0)
 			pr_info("Sensor has already powered-off.\n");
 		else
-			gf_power_off(gf_dev);
+			vince_gf_power_off(gf_dev);
 		gf_dev->device_available = 0;
 		break;
 	case GF_IOC_ENTER_SLEEP_MODE:
@@ -555,7 +555,7 @@ static irqreturn_t gf_irq(int irq, void *handle)
 	struct gf_dev *gf_dev = &gf;
 	char temp = GF_NET_EVENT_IRQ;
 	__pm_wakeup_event(fp_wakelock, msecs_to_jiffies(WAKELOCK_HOLD_TIME));
-	sendnlmsg(&temp);
+	vince_sendnlmsg(&temp);
 	if ((gf_dev->wait_finger_down == true) && (gf_dev->device_available == 1) && (gf_dev->fb_black == 1)) {
 		gf_dev->wait_finger_down = false;
 		schedule_work(&gf_dev->work);
@@ -630,7 +630,7 @@ static int gf_release(struct inode *inode, struct file *filp)
 
 		devm_free_irq(&gf_dev->spi->dev, gf_dev->irq, gf_dev);
 		gf_dev->device_available = 0;
-		gf_power_off(gf_dev);
+		vince_gf_power_off(gf_dev);
 	}
 	mutex_unlock(&device_list_lock);
 	return status;
@@ -671,7 +671,7 @@ static int goodix_fb_state_chg_callback(struct notifier_block *nb,
 				gf_dev->wait_finger_down = true;
 #if defined(GF_NETLINK_ENABLE)
 				temp = GF_NET_EVENT_FB_BLACK;
-				sendnlmsg(&temp);
+				vince_sendnlmsg(&temp);
 #elif defined (GF_FASYNC)
 				if (gf_dev->async) {
 					kill_fasync(&gf_dev->async, SIGIO,
@@ -687,7 +687,7 @@ static int goodix_fb_state_chg_callback(struct notifier_block *nb,
 				gf_dev->fb_black = 0;
 #if defined(GF_NETLINK_ENABLE)
 				temp = GF_NET_EVENT_FB_UNBLACK;
-				sendnlmsg(&temp);
+				vince_sendnlmsg(&temp);
 #elif defined (GF_FASYNC)
 				if (gf_dev->async) {
 					kill_fasync(&gf_dev->async, SIGIO,
@@ -733,10 +733,10 @@ static int driver_init_partial(struct gf_dev *gf_dev)
 
 	gf_dev->device_available = 1;
 
-	if (gf_parse_dts(gf_dev))
+	if (vince_gf_parse_dts(gf_dev))
 		goto error;
 
-	gf_dev->irq = gf_irq_num(gf_dev);
+	gf_dev->irq = vince_gf_irq_num(gf_dev);
 	ret = devm_request_threaded_irq(&gf_dev->spi->dev,
 					gf_dev->irq,
 					NULL,
@@ -753,16 +753,14 @@ static int driver_init_partial(struct gf_dev *gf_dev)
 		gf_disable_irq(gf_dev);
 	}
 
-		gf_hw_reset(gf_dev, 10);
+		vince_gf_hw_reset(gf_dev, 10);
 
 
 	return 0;
 
 error:
 
-	gf_cleanup(gf_dev);
-
-	gf_dev->device_available = 0;
+	vince_gf_cleanup(gf_dev);
 
 	return -EPERM;
 
@@ -774,9 +772,9 @@ error:
 
 static struct class *gf_class;
 #if defined(USE_SPI_BUS)
-static int gf_probe(struct spi_device *spi)
+static int vince_gf_probe(struct spi_device *spi)
 #elif defined(USE_PLATFORM_BUS)
-static int gf_probe(struct platform_device *pdev)
+static int vince_gf_probe(struct platform_device *pdev)
 #endif
 {
 	struct gf_dev *gf_dev = &gf;
@@ -901,9 +899,9 @@ static int gf_probe(struct platform_device *pdev)
 }
 
 #if defined(USE_SPI_BUS)
-static int gf_remove(struct spi_device *spi)
+static int vince_gf_remove(struct spi_device *spi)
 #elif defined(USE_PLATFORM_BUS)
-static int gf_remove(struct platform_device *pdev)
+static int vince_gf_remove(struct platform_device *pdev)
 #endif
 {
 	struct gf_dev *gf_dev = &gf;
@@ -922,7 +920,7 @@ static int gf_remove(struct platform_device *pdev)
 	device_destroy(gf_class, gf_dev->devt);
 	clear_bit(MINOR(gf_dev->devt), minors);
 	if (gf_dev->users == 0)
-		gf_cleanup(gf_dev);
+		vince_gf_cleanup(gf_dev);
 
 	fb_unregister_client(&gf_dev->notifier);
 	mutex_unlock(&device_list_lock);
@@ -931,9 +929,9 @@ static int gf_remove(struct platform_device *pdev)
 }
 
 #if defined(USE_SPI_BUS)
-static int gf_suspend(struct spi_device *spi, pm_message_t mesg)
+static int vince_gf_suspend(struct spi_device *spi, pm_message_t mesg)
 #elif defined(USE_PLATFORM_BUS)
-static int gf_suspend(struct platform_device *pdev, pm_message_t state)
+static int vince_gf_suspend(struct platform_device *pdev, pm_message_t state)
 #endif
 {
 	pr_info(KERN_ERR "gf_suspend_test.\n");
@@ -941,9 +939,9 @@ static int gf_suspend(struct platform_device *pdev, pm_message_t state)
 }
 
 #if defined(USE_SPI_BUS)
-static int gf_resume(struct spi_device *spi)
+static int vince_gf_resume(struct spi_device *spi)
 #elif defined(USE_PLATFORM_BUS)
-static int gf_resume(struct platform_device *pdev)
+static int vince_gf_resume(struct platform_device *pdev)
 #endif
 {
 	pr_info(KERN_ERR "gf_resume_test.\n");
@@ -962,10 +960,10 @@ static struct spi_driver gf_driver = {
 #if defined(USE_SPI_BUS)
 
 #endif
-				.of_match_table = gx_match_table, }, .probe = gf_probe,
-		.remove = gf_remove, .suspend = gf_suspend, .resume = gf_resume, };
+				.of_match_table = gx_match_table, }, .probe = vince_gf_probe,
+		.remove = vince_gf_remove, .suspend = vince_gf_suspend, .resume = vince_gf_resume, };
 
-static int __init gf_init(void)
+static int __init vince_gf_init(void)
 {
 	int status;
 
@@ -998,18 +996,18 @@ static int __init gf_init(void)
 	}
 
 #ifdef GF_NETLINK_ENABLE
-	netlink_init();
+	vince_netlink_init();
 #endif
 	pr_info(" status = 0x%x\n", status);
 	return 0;
 }
 
-module_init(gf_init);
+module_init(vince_gf_init);
 
-static void __exit gf_exit(void)
+static void __exit vince_gf_exit(void)
 {
 #ifdef GF_NETLINK_ENABLE
-	netlink_exit();
+	vince_netlink_exit();
 #endif
 #if defined(USE_PLATFORM_BUS)
 	platform_driver_unregister(&gf_driver);
@@ -1020,9 +1018,9 @@ static void __exit gf_exit(void)
 	unregister_chrdev(SPIDEV_MAJOR, gf_driver.driver.name);
 }
 
-module_exit(gf_exit);
+module_exit(vince_gf_exit);
 
 MODULE_AUTHOR("Jiangtao Yi, <yijiangtao@goodix.com>");
-MODULE_DESCRIPTION("User mode SPI device interface");
+MODULE_DESCRIPTION("Goodix fingerprint vince SPI device interface");
 MODULE_LICENSE("GPL");
-MODULE_ALIAS("spi:gf-spi");
+MODULE_ALIAS("spi:gf-spi-vince");
