@@ -10,7 +10,7 @@
 	focaltech,key-x-coords = <500 200 800>;
 	focaltech,ignore-id-check;
 	focaltech,charger-detect;
-}
+};
 
 &gt9xx_ts {
 	status = "okay";
@@ -62,7 +62,7 @@
 					01 14 78 1A 19 3C 28 00 00 00
 					00 00 00 00 00 00 00 00 00 00
 					00 00 00 00 00 00 83 01];
-}
+};
 
 
 &soc {

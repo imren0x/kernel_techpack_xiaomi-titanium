@@ -11,7 +11,7 @@
 	focaltech,key-x-coords = <500 200 800>;
 	focaltech,ignore-id-check;
 	focaltech,charger-detect;
-}
+};
 
 &soc {
 	i2c@78b7000 { /* BLSP1 QUP3 */

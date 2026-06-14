@@ -1,7 +1,7 @@
 &led_aw2013 {
     AW2013_LED(green, 1)
 	AW2013_LED(blue, 2)
-}
+};
 
 &spi_6 {
 	status = "okay";

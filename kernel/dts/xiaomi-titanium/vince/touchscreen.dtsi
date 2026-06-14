@@ -1,6 +1,6 @@
 &novatek_ts {
 	status = "okay";
-}
+};
 
 &soc { 
 	i2c@78b7000 { /* BLSP1 QUP3 */
