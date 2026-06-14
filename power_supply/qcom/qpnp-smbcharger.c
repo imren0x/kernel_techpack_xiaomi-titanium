@@ -7167,7 +7167,6 @@ static int smbchg_hw_init(struct smbchg_chip *chip)
 				rc);
 	}
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_VINCE)
 	if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_MIDO) {
 		u8 reg = 0;
 
@@ -7184,7 +7183,6 @@ static int smbchg_hw_init(struct smbchg_chip *chip)
 				rc);
 		}
 	}
-#endif
 
 	if (chip->otg_pinctrl) {
 		/* configure OTG enable to pin control active low */
