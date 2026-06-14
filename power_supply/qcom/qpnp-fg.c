@@ -8548,14 +8548,14 @@ static int fg_memif_init(struct fg_chip *chip)
 	    xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_SAKURA ||
 	    xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TISSOT) {
 		
-		settings[SOFT_COLD].value = 150;
-		settings[SOFT_HOT].value = 450;
-		settings[HARD_COLD].value = 0;
+		settings[FG_MEM_SOFT_COLD].value = 150;
+		settings[FG_MEM_SOFT_HOT].value = 450;
+		settings[FG_MEM_HARD_COLD].value = 0;
 		
 		if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_VINCE) {
-			settings[HARD_HOT].value = 550;
+			settings[FG_MEM_HARD_HOT].value = 550;
 		} else {
-			settings[HARD_HOT].value = 450;
+			settings[FG_MEM_HARD_HOT].value = 450;
 		}
 	}
 
@@ -8564,7 +8564,7 @@ static int fg_memif_init(struct fg_chip *chip)
 	    xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TISSOT ||
 	    xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_MIDO) {
 		
-		settings[VBAT_EST_DIFF].value = 200;
+		settings[FG_MEM_VBAT_EST_DIFF].value = 200;
 	}
 #endif
 
