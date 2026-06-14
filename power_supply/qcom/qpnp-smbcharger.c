@@ -44,6 +44,9 @@
 #include <linux/extcon-provider.h>
 #include <linux/pmic-voter.h>
 #include <linux/iio/consumer.h>
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TITANIUM)
+#include <xiaomi-titanium/mach.h>
+#endif
 
 /* Mask/Bit helpers */
 #define _SMB_MASK(BITS, POS) \

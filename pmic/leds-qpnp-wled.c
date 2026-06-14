@@ -27,6 +27,9 @@
 #include <linux/delay.h>
 #include <xiaomi-titanium/leds-qpnp-wled.h>
 #include <linux/qpnp/qpnp-revid.h>
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TITANIUM)
+#include <xiaomi-titanium/mach.h>
+#endif
 
 /* base addresses */
 #define QPNP_WLED_CTRL_BASE		"qpnp-wled-ctrl-base"
