@@ -107,6 +107,8 @@
 			goodix,rst-gpio = <&tlmm 64 0x0>;
 			goodix,irq-gpio = <&tlmm 65 0x2008>;
 
+		};
+
 		novatek_ts: novatek@62 {
 			compatible = "novatek,NVT-ts_vince";
 			reg = <0x62>;
