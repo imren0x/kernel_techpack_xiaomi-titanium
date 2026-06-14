@@ -287,18 +287,18 @@ static int ysl_hw_reset(struct fpc1020_data *fpc1020)
 {
 	int irq_gpio;
 	struct device *dev = fpc1020->dev;
-	int rc = select_pin_ctl(fpc1020, "fpc1020_reset_active");
+	int rc = ysl_select_pin_ctl(fpc1020, "fpc1020_reset_active");
 
 	if (rc)
 		goto exit;
 	usleep_range(RESET_HIGH_SLEEP1_MIN_US, RESET_HIGH_SLEEP1_MAX_US);
 
-	rc = select_pin_ctl(fpc1020, "fpc1020_reset_reset");
+	rc = ysl_select_pin_ctl(fpc1020, "fpc1020_reset_reset");
 	if (rc)
 		goto exit;
 	usleep_range(RESET_LOW_SLEEP_MIN_US, RESET_LOW_SLEEP_MAX_US);
 
-	rc = select_pin_ctl(fpc1020, "fpc1020_reset_active");
+	rc = ysl_select_pin_ctl(fpc1020, "fpc1020_reset_active");
 	if (rc)
 		goto exit;
 	usleep_range(RESET_HIGH_SLEEP2_MIN_US, RESET_HIGH_SLEEP2_MAX_US);
@@ -501,7 +501,7 @@ static irqreturn_t fpc1020_irq_handler(int irq, void *handle)
 	return IRQ_HANDLED;
 }
 
-static int fpc1020_ysl_ysl_request_named_gpio(struct fpc1020_data *fpc1020,
+static int fpc1020_ysl_request_named_gpio(struct fpc1020_data *fpc1020,
 	const char *label, int *gpio)
 {
 	struct device *dev = fpc1020->dev;
