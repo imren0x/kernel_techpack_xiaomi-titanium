@@ -24,6 +24,89 @@
 		    focaltech,max-touch-number = <10>;
 	    };
 
+		gt917d_ts: goodix@5d{
+			compatible = "goodix,gt9xx";
+
+			status = "disabled";
+
+			reg = <0x5d>;
+			interrupt-parent = <&tlmm>;
+			interrupts = <65 0x2008>;
+
+			vdd_ana-supply = <&pm8953_l10>;
+			vcc_i2c-supply = <&pm8953_l6>;
+			pinctrl-names = "gdix_ts_int_default", "gdix_ts_int_output_low",
+				"gdix_ts_int_output_high", "gdix_ts_int_input",
+				"gdix_ts_rst_default", "gdix_ts_rst_output_low",
+				"gdix_ts_rst_output_high", "gdix_ts_rst_input";
+			pinctrl-0 = <&ts_int_default>;
+			pinctrl-1 = <&ts_int_output_low>;
+			pinctrl-2 = <&ts_int_output_high>;
+			pinctrl-3 = <&ts_int_input>;
+			pinctrl-4 = <&ts_rst_default>;
+			pinctrl-5 = <&ts_rst_output_low>;
+			pinctrl-6 = <&ts_rst_output_high>;
+			pinctrl-7 = <&ts_rst_input>;
+			reset-gpios = <&tlmm 64 0x00>;
+			irq-gpios = <&tlmm 65 0x2008>;
+			irq-flags = <1>;
+			touchscreen-max-id = <10>;
+			goodix,type-a-report = <0>;
+			goodix,driver-send-cfg = <1>;
+			goodix,wakeup-with-reset = <0>;
+			goodix,resume-in-workqueue = <1>;
+			goodix,int-sync = <1>;
+			goodix,swap-x2y = <0>;
+			goodix,esd-protect = <1>;
+			goodix,pen-suppress-finger = <0>;
+			goodix,auto-update = <1>;
+			goodix,auto-update-cfg = <0>;
+			goodix,power-off-sleep = <0>;
+			goodix,slide-wakeup = <1>;
+		};
+
+		gt9xx_ts: goodix_ts@14 {
+			compatible = "goodix,gt9xx";
+			reg = <0x14>;
+			vdd_ana-supply = <&pm8953_l10>;
+			vcc_i2c-supply = <&pm8953_l6>;
+
+			interrupt-parent = <&tlmm>;
+			interrupts = <65 0x2008>;
+
+			status = "disabled";
+
+			pinctrl-names = "gdix_ts_int_default", "gdix_ts_int_output_low",
+				"gdix_ts_int_output_high", "gdix_ts_int_input",
+				"gdix_ts_rst_default", "gdix_ts_rst_output_low",
+				"gdix_ts_rst_output_high", "gdix_ts_rst_input";
+			pinctrl-0 = <&ts_int_default>;
+			pinctrl-1 = <&ts_int_output_low>;
+			pinctrl-2 = <&ts_int_output_high>;
+			pinctrl-3 = <&ts_int_input>;
+			pinctrl-4 = <&ts_rst_default>;
+			pinctrl-5 = <&ts_rst_output_low>;
+			pinctrl-6 = <&ts_rst_output_high>;
+			pinctrl-7 = <&ts_rst_input>;
+			reset-gpios = <&tlmm 64 0x00>;
+			irq-gpios = <&tlmm 65 0x2008>;
+			irq-flags = <1>;
+			touchscreen-max-id = <10>;
+			goodix,type-a-report = <0>;
+			goodix,driver-send-cfg = <1>;
+			goodix,wakeup-with-reset = <0>;
+			goodix,resume-in-workqueue = <1>;
+			goodix,int-sync = <1>;
+			goodix,swap-x2y = <0>;
+			goodix,esd-protect = <1>;
+			goodix,pen-suppress-finger = <0>;
+			goodix,auto-update = <0>;
+			goodix,auto-update-cfg = <0>;
+			goodix,power-off-sleep = <0>;
+			goodix,slide-wakeup = <1>;
+			goodix,rst-gpio = <&tlmm 64 0x0>;
+			goodix,irq-gpio = <&tlmm 65 0x2008>;
+
 		novatek_ts: novatek@62 {
 			compatible = "novatek,NVT-ts_vince";
 			reg = <0x62>;
