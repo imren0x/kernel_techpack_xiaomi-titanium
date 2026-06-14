@@ -64,11 +64,11 @@
 
 #define GF_SPIDEV_NAME     "goodix,fingerprint-ysl"
 /*device name after register in charater*/
-#define GF_DEV_NAME            "goodix_fp_ysl"
-#define	GF_INPUT_NAME	    "gf3208_ysl"
+#define GF_DEV_NAME            "goodix_fp-ysl"
+#define	GF_INPUT_NAME	    "gf3208"
 
-#define	CHRD_DRIVER_NAME	"goodix_fp_spi_ysl"
-#define	CLASS_NAME		    "goodix_fp_ysl"
+#define	CHRD_DRIVER_NAME	"goodix_fp_spi"
+#define	CLASS_NAME		    "goodix_fp"
 
 #define PROC_NAME  "hwinfo"
 

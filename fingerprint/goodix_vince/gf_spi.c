@@ -59,11 +59,11 @@
 
 #define GF_SPIDEV_NAME     "goodix,fingerprint-vince"
 /*device name after register in charater*/
-#define GF_DEV_NAME            "goodix_fp_vince"
-#define	GF_INPUT_NAME	   "gf3208_vince"	/*"goodix_fp_vince" */
+#define GF_DEV_NAME            "goodix_fp-vince"
+#define	GF_INPUT_NAME	   "gf3208"	/*"goodix_fp" */
 
-#define	CHRD_DRIVER_NAME	"goodix_fp_spi_vince"
-#define	CLASS_NAME		   "goodix_fp_vince"
+#define	CHRD_DRIVER_NAME	"goodix_fp_spi"
+#define	CLASS_NAME		   "goodix_fp"
 #define SPIDEV_MAJOR		225	/* assigned */
 #define N_SPI_MINORS		32	/* ... up to 256 */
 
