@@ -3,6 +3,7 @@
 #include "soc.dtsi"
 #include "audio.dtsi"
 #include "display.dtsi"
+#include "xiaomi-common.dtsi"
 #include "haptic.dtsi"
 #include "regulator.dtsi"
 #include "leds.dtsi"

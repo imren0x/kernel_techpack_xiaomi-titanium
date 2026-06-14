@@ -55,6 +55,7 @@
 		qcom,bam-consumer-pipe-index = <4>;
 		qcom,bam-producer-pipe-index = <5>;
 		qcom,master-id = <84>;
+		status = "disabled";
 	};
     spi_6: spi@7af6000 { /* BLSP2 QUP2 */
 		compatible = "qcom,spi-qup-v2";
@@ -79,5 +80,6 @@
 		qcom,bam-consumer-pipe-index = <6>;
 		qcom,bam-producer-pipe-index = <7>;
 		qcom,master-id = <84>;
+		status = "disabled";
 	};
 };

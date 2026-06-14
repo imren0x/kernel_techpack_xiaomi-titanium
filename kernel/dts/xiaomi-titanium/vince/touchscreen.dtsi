@@ -1,3 +1,7 @@
+&novatek_ts {
+	status = "okay";
+}
+
 &soc { 
 	i2c@78b7000 { /* BLSP1 QUP3 */
 		status = "okay";
@@ -47,17 +51,6 @@
 			synaptics,reset-delay-ms = <200>;
 			synaptics,reset-on-state = <0>;
 			synaptics,ub-i2c-addr = <0x2c>;
-		};
-
-		novatek@62 {
-			compatible = "novatek,NVT-ts_vince";
-			reg = <0x62>;
-			status = "ok";
-			interrupt-parent = <&tlmm>;
-			interrupts = <65 IRQ_TYPE_EDGE_FALLING>;
-
-			novatek,reset-gpio = <&tlmm 64 0x0>;
-			novatek,irq-gpio = <&tlmm 65 0x2001>;
 		};
 	};
 };
