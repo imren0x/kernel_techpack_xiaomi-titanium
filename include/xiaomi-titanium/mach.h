@@ -30,7 +30,7 @@ enum xiaomi_msm8953_mach_types {
 	XIAOMI_MSM8953_MACH_MAX,
 };
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_MSM8953)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TITANIUM)
 extern enum xiaomi_msm8953_mach_family_types xiaomi_msm8953_mach_get_family(void);
 extern enum xiaomi_msm8953_mach_types xiaomi_msm8953_mach_get(void);
 #else
