@@ -6,6 +6,6 @@
 	status = "okay";
 };
 
-&spi_ir {
+&spidev_ir {
 	status = "okay";
-}
+};

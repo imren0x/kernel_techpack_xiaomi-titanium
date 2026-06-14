@@ -7,6 +7,6 @@
 	status = "okay";
 };
 
-&peel_ir {
+&spi_peel_ir {
 	status = "okay";
-}
+};
